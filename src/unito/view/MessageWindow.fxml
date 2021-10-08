@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="402.0" prefWidth="589.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text layoutX="30.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Oggetto" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="8.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="30.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mittente" AnchorPane.leftAnchor="30.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="30.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Testo del messaggio" AnchorPane.leftAnchor="30.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="subjectTextField" editable="false" layoutX="124.0" layoutY="9.0" prefHeight="25.0" prefWidth="434.0" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="9.0" />
+      <TextField editable="false" layoutX="125.0" layoutY="46.0" prefHeight="25.0" prefWidth="434.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="30.0" />
+      <TextArea fx:id="recipiantTextArea" editable="false" layoutX="31.0" layoutY="153.0" prefHeight="219.0" prefWidth="529.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="153.0" />
+      <Text layoutX="30.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destinatari">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <TextField fx:id="recipientsTextField" editable="false" layoutX="125.0" layoutY="83.0" prefHeight="25.0" prefWidth="434.0" />
+   </children>
+</AnchorPane>
