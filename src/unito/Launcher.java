@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 
 public class Launcher extends Application {
 
-    /* ciao ciao ciao Marco*/
     public static void main(String[] args) {
         launch(args);
     }
