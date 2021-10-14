@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="javafx-swt">
     <CLASSES>
-      <root url="jar://$PATH_TO_FX$/javafx-swt.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.base.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.fxml.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.graphics.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.media.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.swing.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx-swt.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.base.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.controls.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.fxml.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.graphics.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.media.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.swing.jar!/" />
+      <root url="jar://$USER_HOME$/OneDrive - Università degli Studi di Torino/Documenti/Progetto PROG 3/openjfx-17.0.0.1/javafx-sdk-17.0.0.1/lib/javafx.web.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
