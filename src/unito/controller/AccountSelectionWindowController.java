@@ -1,20 +1,19 @@
 package unito.controller;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import unito.EmailManager;
-import unito.controller.service.RequestResult;
+import unito.controller.service.ClientRequestResult;
+import unito.controller.service.ClientRequestType;
 import unito.controller.service.UpdateEmailService;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class AccountSelectionWindowController extends BaseController implements Initializable {
@@ -43,16 +42,16 @@ public class AccountSelectionWindowController extends BaseController implements 
         }
 
         /* Qui viene avviato il task volto a collegarsi e scaricare "l'EmailBean" dal server */
-        UpdateEmailService s = new UpdateEmailService(emailManager);
+        UpdateEmailService updateEmailService = new UpdateEmailService(emailManager, ClientRequestType.HANDSHAKING, null);
         /* Viene avviato un thread apposito per gestire questo lavoro in concorrenza */
-        FutureTask<RequestResult> loginService = new FutureTask<RequestResult>(s);
+        FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(updateEmailService);
 
         Thread thread = new Thread(loginService);
         thread.start();
 
 
         try {
-            RequestResult r = loginService.get();
+            ClientRequestResult r = loginService.get();
 
             switch (r) {
                 case SUCCESS:

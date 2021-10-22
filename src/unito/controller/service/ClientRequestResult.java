@@ -1,7 +1,8 @@
 package unito.controller.service;
 
-public enum RequestResult {
+public enum ClientRequestResult {
     FAILED_BY_CREDENTIALS,
     FAILED_BY_SERVER_DOWN,
-    SUCCESS;
+    SUCCESS,
+    ERROR;
 }
