@@ -1,20 +1,14 @@
 package unito;
 
 import javafx.application.Application;
-import javafx.fxml.Initializable;
 import javafx.stage.Stage;
-import unito.controller.ComposeWindowController;
 import unito.controller.persistence.PersistenceAccess;
 import unito.controller.persistence.ValidAccount;
-import unito.controller.service.UpdateEmailService;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
-import java.net.InetAddress;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class Launcher extends Application {
 

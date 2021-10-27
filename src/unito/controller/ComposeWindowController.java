@@ -9,16 +9,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import unito.EmailManager;
+import unito.controller.service.ClientRequestResult;
+import unito.controller.service.ClientRequestType;
+import unito.controller.service.ClientService;
 import unito.model.Email;
 import unito.view.ViewFactory;
 
 import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ComposeWindowController extends BaseController{
+public class ComposeWindowController extends BaseController {
 
     @FXML // fx:id="subjectTextField"
     private TextField subjectTextField; // Value injected by FXMLLoader
@@ -30,7 +37,10 @@ public class ComposeWindowController extends BaseController{
     private TextArea recipiantTextArea; // Value injected by FXMLLoader
 
     private Email newEmail;
+
     private boolean dirtyTextArea = true;
+
+    /*array di destinatari*/
     private String[] recipientsBuffer;
 
     /**
@@ -43,8 +53,8 @@ public class ComposeWindowController extends BaseController{
     }
 
     @FXML
-    void checkRecipients(){
-        if(checkRecipientsTextField()){
+    void checkRecipients() {
+        if (checkRecipientsTextField()) {
             clearTextAreaAction();
         }
     }
@@ -75,28 +85,55 @@ public class ComposeWindowController extends BaseController{
     void sendMessageAction() {
         System.out.println("sendMessageAction() called.");
 
-        if(checkRecipientsTextField()) {
-            for(String recipient : recipientsBuffer) {
-                Email email = new Email("triccheballacche@gmail.com",
-                        recipient, subjectTextField.getText(),
-                        recipiantTextArea.getText());
-                System.out.println(email.toString());
+        List<Email> toSend = new ArrayList<Email>();
+
+        if (checkRecipientsTextField()) {
+            for (String recipient : recipientsBuffer) {
+                toSend.add(new Email("triccheballacche@gmail.com",
+                        recipient,
+                        subjectTextField.getText(),
+                        recipiantTextArea.getText()));
+            }
+
+            //TODO: spedisci il messaggio
+
+            ClientService clientService = new ClientService(emailManager, ClientRequestType.INVIOMESSAGGIO, toSend);
+            FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(clientService);
+
+            Thread thread = new Thread(loginService);
+            thread.start();
+
+            //Viene restituito un risultato dal thread (PER QUESTO E'UN FUTURETASK)
+            try {
+                ClientRequestResult r = loginService.get();
+
+                switch (r) {
+                    case SUCCESS:
+                        ViewFactory.viewAlert("Evviva!", "Login avvenuto con successo");
+                        Stage stage = (Stage) recipientsTextField.getScene().getWindow();
+                        viewFactory.closeStage(stage);
+                        return;
+
+                    case FAILED_BY_CREDENTIALS:
+                        ViewFactory.viewAlert("Attenzione", "Errore nelle credenziali");
+                        return;
+
+                    case FAILED_BY_SERVER_DOWN:
+                        ViewFactory.viewAlert("Attenzione","Il server è spento");
+                        return;
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
 
 
-
-            Stage stage = (Stage) recipientsTextField.getScene().getWindow();
-            viewFactory.closeStage(stage);
         }
-
-
-        //spedisci il messaggio
-
     }
 
     @FXML
     void clearTextAreaAction() {
-        if(dirtyTextArea) {
+        if (dirtyTextArea) {
             System.out.println("clearTextAreaAction() called.");
             recipientsTextField.requestFocus();
             recipientsTextField.selectAll();

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.controller.service.ClientRequestResult;
 import unito.controller.service.ClientRequestType;
-import unito.controller.service.UpdateEmailService;
+import unito.controller.service.ClientService;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
@@ -42,15 +42,15 @@ public class AccountSelectionWindowController extends BaseController implements 
         }
 
         /* Qui viene avviato il task volto a collegarsi e scaricare "l'EmailBean" dal server */
-        UpdateEmailService updateEmailService = new UpdateEmailService(emailManager, ClientRequestType.HANDSHAKING, null);
+        ClientService clientService = new ClientService(emailManager, ClientRequestType.HANDSHAKING, null);
         /* Viene avviato un thread apposito per gestire questo lavoro in concorrenza */
-        FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(updateEmailService);
+        FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(clientService);
 
         Thread thread = new Thread(loginService);
         thread.start();
 
-
         try {
+            //Viene restituito un risultato dal thread (PER QUESTO E'UN FUTURETASK)
             ClientRequestResult r = loginService.get();
 
             switch (r) {

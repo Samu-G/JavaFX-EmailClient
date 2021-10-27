@@ -13,18 +13,18 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 //TODO: PERCHE' CALLABLE?
-public class UpdateEmailService implements Callable<ClientRequestResult> {
+public class ClientService implements Callable<ClientRequestResult> {
 
     private EmailManager emailManager;
     private ValidAccount myCredentials;
     private EmailAccount currentAccount;
     private Socket socket;
     private ClientRequestType clientRequestType;
-    private Email emailToSend;
+    private List<Email> emailToSend;
     private ObjectOutputStream outStream;
     private ObjectInputStream inStream;
 
-    public UpdateEmailService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
+    public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, List<Email> toSend) {
         this.emailManager = emailManager;
         this.currentAccount = emailManager.getCurrentAccount();
         this.myCredentials = new ValidAccount(currentAccount.getAddress(), currentAccount.getPassword());
@@ -89,11 +89,23 @@ public class UpdateEmailService implements Callable<ClientRequestResult> {
         }
     }
 
-    private void invioMessaggi(Email email) {
+    private void invioMessaggi(List<Email> email) {
         //TODO: USARE UN VALID ACCOUNT DA MANDARE IN STREAM
+
+        //Creare un Array di ArrayList<ValidAccount>
+        for {
+            ArrayList<ValidAccount>
+        }
+
+        inStream.writeObject(validAccountToSend);
+
+
     }
 
-    private void riceviMessaggi() {}
+    private void riceviMessaggi() {
+
+
+    }
 
     private void openStream() {
         try {
