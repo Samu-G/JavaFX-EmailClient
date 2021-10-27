@@ -24,9 +24,11 @@ public class Launcher extends Application {
 
     /* Leggo il file di persistenza e salvo la lista di account in validAccountList */
     private final static List<ValidAccount> validAccountList = PersistenceAccess.loadFromPersistence();
+
     //init model
     /* Questo oggetto emailManager gestirà le liste di account, email relative a quell'account, account corrente */
     private EmailManager emailManager = new EmailManager(validAccountList);
+
     //init view
     /* Questo oggetto gestisce la view, necessita del puntatore a emailManager  */
     private ViewFactory viewFactory = new ViewFactory(emailManager);
