@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import unito.controller.persistence.ValidAccount;
-import unito.controller.persistence.ValidEmail;
+import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
 
@@ -81,10 +81,12 @@ public class EmailManager {
      *
      * @param validEmailList QUESTA E' UNA LISTA DI VALIDEMAIL che restituisce loadPersistence
      */
-    public void loadValidEmailFromPersistence(List<ValidEmail> validEmailList) {
-        for (int i = 0; i < validEmailList.size(); i++) {
-            ValidEmail emailToLoad = validEmailList.get(i);
-            emailList.addAll(new Email(emailToLoad.getSender(), emailToLoad.getRecipients(), emailToLoad.getSubject(), emailToLoad.getTextMessage()));
+    public void loadEmail(List<ValidEmail> validEmailList) {
+        if(validEmailList != null) {
+            for (int i = 0; i < validEmailList.size(); i++) {
+                ValidEmail emailToLoad = validEmailList.get(i);
+                emailList.addAll(new Email(emailToLoad.getSender(), emailToLoad.getRecipients(), emailToLoad.getSubject(), emailToLoad.getTextMessage()));
+            }
         }
     }
 
@@ -102,4 +104,7 @@ public class EmailManager {
     }
 
 
+    public void refreshEmailList() {
+
+    }
 }

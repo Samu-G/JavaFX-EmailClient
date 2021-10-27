@@ -1,4 +1,4 @@
-package unito.controller.persistence;
+package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import unito.model.Email;

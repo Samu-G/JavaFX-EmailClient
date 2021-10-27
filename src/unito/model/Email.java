@@ -22,7 +22,7 @@ import java.util.Objects;
  * <p>
  * USARE LE P R O P E R T Y
  */
-public class Email implements Serializable {
+public class Email {
 
     private static long identifier;
     private SimpleStringProperty sender; //mittente

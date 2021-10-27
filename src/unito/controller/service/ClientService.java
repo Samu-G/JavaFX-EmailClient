@@ -2,13 +2,15 @@ package unito.controller.service;
 
 import unito.EmailManager;
 import unito.controller.persistence.ValidAccount;
-import unito.controller.persistence.ValidEmail;
+import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
+import unito.view.ViewFactory;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -52,11 +54,14 @@ public class ClientService implements Callable<ClientRequestResult> {
                 System.out.println("risultato ottenuto");
                 if (result != null) {
                     if (result == ClientRequestResult.SUCCESS) {
-                            switch(clientRequestType) {
-                                case HANDSHAKING: handshaking();
-                                case INVIOMESSAGGIO: invioMessaggi(emailToSend);
-                                case RICEVIMESSAGGIO: riceviMessaggi();
-                            }
+                        switch (clientRequestType) {
+                            case HANDSHAKING:
+                                handshaking();
+                            case INVIOMESSAGGIO:
+                                invioMessaggi(emailToSend);
+                            case RICEVIMESSAGGIO:
+                                riceviMessaggi();
+                        }
                         return ClientRequestResult.SUCCESS;
                     } else if (result == ClientRequestResult.FAILED_BY_CREDENTIALS) {
                         return ClientRequestResult.FAILED_BY_CREDENTIALS;
@@ -83,28 +88,46 @@ public class ClientService implements Callable<ClientRequestResult> {
             List<ValidEmail> myEmail = (List<ValidEmail>) inStream.readObject();
             System.out.println("dopo");
             /* Mi trasferisco in emailManager le email appena scaricate dal server */
-            emailManager.loadValidEmailFromPersistence(myEmail);
+            emailManager.loadEmail(myEmail);
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
     }
 
     private void invioMessaggi(List<Email> email) {
-        //TODO: USARE UN VALID ACCOUNT DA MANDARE IN STREAM
+        List<ValidEmail> validEmailToSend = new ArrayList<>();
 
-        //Creare un Array di ArrayList<ValidAccount>
-        for {
-            ArrayList<ValidAccount>
+        for (Email e : email) {
+            ValidEmail toAdd = new ValidEmail(e.getSender(),
+                    e.getRecipients(),
+                    e.getSubject(),
+                    e.getSize(),
+                    e.getDate(),
+                    e.getTextMessage());
+            validEmailToSend.add(toAdd);
         }
 
-        inStream.writeObject(validAccountToSend);
-
-
+        try {
+            outStream.writeObject(validEmailToSend);
+        } catch (IOException e) {
+            ViewFactory.viewAlert("Errore!", "Errore nell'invio dei messaggi. ");
+            e.printStackTrace();
+        }
     }
 
     private void riceviMessaggi() {
 
+        List<ValidEmail> validEmailToRecive;
 
+        try {
+            validEmailToRecive = (List<ValidEmail>) inStream.readObject();
+            emailManager.loadEmail(validEmailToRecive);
+            //TODO: da implementare solo se la lista non si aggiorna dopo loadEmail
+            emailManager.refreshEmailList();
+        } catch (IOException | ClassNotFoundException e) {
+            ViewFactory.viewAlert("Errore!", "Errore nella ricezione dei messaggi. ");
+            e.printStackTrace();
+        }
     }
 
     private void openStream() {
