@@ -3,10 +3,12 @@ package unito;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import unito.controller.ComposeWindowController;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
+import unito.view.ViewFactory;
 
 import java.util.List;
 
@@ -96,7 +98,25 @@ public class EmailManager {
 
     }
 
+    public void replySelectedMessage() {
+        ViewFactory viewFactory = new ViewFactory(this);
+        viewFactory.showComposeWindow();
+        ComposeWindowController composeWindow = new ComposeWindowController(this, viewFactory, "ComposeWindow.fxml");
+
+        String recipients = getSelectedMessage().getRecipients();
+        composeWindow.setRecipientsBuffer(recipients);
+    }
+
+    public void forwardSelectedMessage() {
+        ViewFactory viewFactory = new ViewFactory(this);
+        viewFactory.showComposeWindow();
+        ComposeWindowController composeWindow = new ComposeWindowController(this, viewFactory, "ComposeWindow.fxml");
+
+        composeWindow.setSubjectTextField(getSelectedMessage().getSubject());
+        composeWindow.setRecipiantTextArea(getSelectedMessage().getTextMessage());
+    }
+
     public void deleteSelectedMessage() {
-        //TODO: da implementare
+        emailList.remove(getSelectedMessage());
     }
 }

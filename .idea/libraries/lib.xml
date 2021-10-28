@@ -1,14 +1,15 @@
 <component name="libraryTable">
-  <library name="javafx-swt">
+  <library name="lib">
     <CLASSES>
       <root url="jar://$PATH_TO_FX$/javafx-swt.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.graphics.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.fxml.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.swing.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.media.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.base.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
+      <root url="file://$PATH_TO_FX$" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
@@ -19,6 +20,9 @@
       <root url="jar://$PATH_TO_FX$/src.zip!/javafx.media" />
       <root url="jar://$PATH_TO_FX$/src.zip!/javafx.swing" />
       <root url="jar://$PATH_TO_FX$/src.zip!/javafx.web" />
+      <root url="file://$PATH_TO_FX$" />
     </SOURCES>
+    <jarDirectory url="file://$PATH_TO_FX$" recursive="false" />
+    <jarDirectory url="file://$PATH_TO_FX$" recursive="false" type="SOURCES" />
   </library>
 </component>

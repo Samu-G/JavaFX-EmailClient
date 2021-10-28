@@ -52,6 +52,21 @@ public class ComposeWindowController extends BaseController {
         super(emailManager, viewFactory, fxmlName);
     }
 
+    // AGGIUNTA: metodo per inizializzare il buffer dei destinatari
+    public void setRecipientsBuffer(String recipients) {
+        // TODO: IMPLEMENTARE QUANDO SI HANNO PIU' DESTINATARI, REALIZZARE UN PARSER CHE SCOMPONE LA STRINGA
+
+        recipientsBuffer[0] = recipients;
+    }
+
+    public void setSubjectTextField(String text) {
+        subjectTextField.setText(text);
+    }
+
+    public void setRecipiantTextArea(String text) {
+        recipiantTextArea.setText(text);
+    }
+
     @FXML
     void checkRecipients() {
         if (checkRecipientsTextField()) {
@@ -141,6 +156,5 @@ public class ComposeWindowController extends BaseController {
             dirtyTextArea = false;
         }
     }
-
 
 }

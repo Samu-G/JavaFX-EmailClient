@@ -76,25 +76,22 @@ public class MainWindowController extends BaseController implements Initializabl
         //TODO: da implementare
         Rispondi.setOnAction(e -> {
             System.out.println("Rispondi contextualMenuItem pressed.");
-            emailManager.deleteSelectedMessage();
+            emailManager.replySelectedMessage();
         });
 
         Rispondi_a_tutti.setOnAction(e -> {
             System.out.println("Rispondi_a_tutti contextualMenuItem pressed.");
-            emailManager.deleteSelectedMessage();
-
+            emailManager.replySelectedMessage();
         });
 
         Inoltra.setOnAction(e -> {
             System.out.println("Inoltra contextualMenuItem pressed.");
-            emailManager.deleteSelectedMessage();
-
+            emailManager.forwardSelectedMessage();
         });
 
         Cancella.setOnAction(e -> {
             System.out.println("Cancella contextualMenuItem pressed.");
             emailManager.deleteSelectedMessage();
-
         });
 
     }
