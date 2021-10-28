@@ -56,7 +56,6 @@ public class Email {
         this.textMessage = new SimpleStringProperty(textMessage);
         this.size = new SimpleStringProperty("0");
         this.isRead = false;
-        System.out.println(this.toString());
     }
 
     public String getSender() {

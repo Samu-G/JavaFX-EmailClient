@@ -66,6 +66,7 @@ public class AccountSelectionWindowController extends BaseController implements 
                     return;
 
                 case FAILED_BY_SERVER_DOWN:
+                    System.out.println("qui");
                     errorLabel.setText("Il server è spento!");
                     return;
             }

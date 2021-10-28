@@ -73,6 +73,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
     private void setUpContextMenus() {
 
+        //TODO: da implementare
         Rispondi.setOnAction(e -> {
             System.out.println("Rispondi contextualMenuItem pressed.");
             emailManager.deleteSelectedMessage();
@@ -122,26 +123,6 @@ public class MainWindowController extends BaseController implements Initializabl
                 }
             }
         });
-        /*
-        emailsTableView.setOnMouseClicked(e -> {
-
-
-            if(mouseClicked)
-            System.out.println("mouse clicked!");
-            Email message = emailsTableView.getSelectionModel().getSelectedItem();
-
-            if (message != null) {
-                emailManager.setSelectedMessage(message);
-                String windowTitle = message.getSubject().toString();
-                viewFactory.showMessageWindow(windowTitle);
-                emailsTableView.getSelectionModel().clearSelection();
-            } else {
-                System.out.println("message is null");
-            }
-
-        });
-
-         */
     }
 
     private void setUpEmailsList() {
@@ -163,27 +144,6 @@ public class MainWindowController extends BaseController implements Initializabl
         emailsTableView.setItems(this.emailManager.getEmailList() );
     }
 
-/*
-    private void setUpContextMenus() {
-        Rispondi.setOnAction(e -> {
-            emailManager.setUnRead();
-        });
-        Rispondi_a_tutti.setOnAction(e -> {
-            emailManager.deleteSelectedMessage();
-            messageView.getEngine().loadContent("");
-        });
-        Inoltra.setOnAction(e -> {
-            emailManager.deleteSelectedMessage();
-            messageView.getEngine().loadContent("");
-        });
-        Cancella.setOnAction(e -> {
-            emailManager.deleteSelectedMessage();
-            messageView.getEngine().loadContent("");
-        });
-
-    }
-
-*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpEmailsList();

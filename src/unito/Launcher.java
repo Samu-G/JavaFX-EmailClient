@@ -12,13 +12,9 @@ import java.util.List;
 
 public class Launcher extends Application {
 
-    //load from persistence
-    /* Leggo il file di persistenza e salvo la lista di account in validAccountList */
-    private final static List<ValidAccount> validAccountList = PersistenceAccess.loadFromPersistenceValidAccount();
-
     //init model
     /* Questo oggetto emailManager gestirà le liste di account, email relative a quell'account, account corrente */
-    private EmailManager emailManager = new EmailManager(validAccountList);
+    private EmailManager emailManager = new EmailManager(PersistenceAccess.loadFromPersistenceValidAccount());
 
     //init view
     /* Questo oggetto gestisce la view, necessita del puntatore a emailManager  */
@@ -31,7 +27,7 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         /* Controllo se ci sono account salvati nel file di persistenza appena letto */
-        if (validAccountList.size() > 0) {
+        if (emailManager.emailAccounts.size() > 0) {
             viewFactory.showAccountSelectionWindow();
         }
         /* Do messaggio di errore se non ne trovo neanche uno */

@@ -17,21 +17,16 @@ import java.util.List;
  */
 public class EmailManager {
 
-    /* Lista osservabile volta ad ospitare gli account letti dalla lista di persistenza */
-    private ObservableList<EmailAccount> emailAccounts = FXCollections.observableArrayList();
-
-    /* Account scelto dall'utente dalla lista di emailAccount */
-    private SimpleObjectProperty<EmailAccount> currentAccount = new SimpleObjectProperty<>();
-
-    /* Lista di email della casella scelta dall'utente */
-    private ObservableList<Email> emailList = FXCollections.observableArrayList();
-
-    /* ? */
+    public ObservableList<EmailAccount> emailAccounts;
+    private SimpleObjectProperty<EmailAccount> currentAccount;
+    private ObservableList<Email> emailList;
     private Email selectedMessage;
-
     private String logString;
 
     public EmailManager(List<ValidAccount> validAccountList) {
+        this.emailAccounts = FXCollections.observableArrayList();
+        this.currentAccount = new SimpleObjectProperty<>();
+        this.emailList = FXCollections.observableArrayList();
         loadValidAccountFromPersistence(validAccountList);
     }
 
@@ -42,13 +37,6 @@ public class EmailManager {
                 "\nADRESS: " + emailAccount.getAddress() +
                 "\nPASSWORD: " + emailAccount.getPassword() +
                 "\n**********");
-    }
-
-    public SimpleObjectProperty<EmailAccount> currentAccountProperty() {
-        return currentAccount;
-    }
-
-    public void deleteSelectedMessage() {
     }
 
     public void setSelectedMessage(Email message) {
@@ -106,5 +94,9 @@ public class EmailManager {
 
     public void refreshEmailList() {
 
+    }
+
+    public void deleteSelectedMessage() {
+        //TODO: da implementare
     }
 }

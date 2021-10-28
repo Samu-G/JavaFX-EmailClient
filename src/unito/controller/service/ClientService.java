@@ -8,13 +8,14 @@ import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-//TODO: PERCHE' CALLABLE?
+
 public class ClientService implements Callable<ClientRequestResult> {
 
     private EmailManager emailManager;
@@ -45,6 +46,7 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             System.out.println("Ho aperto il socket verso il server. \n");
             try {
+
                 openStream();
 
                 outStream.writeObject(myCredentials);
@@ -52,6 +54,7 @@ public class ClientService implements Callable<ClientRequestResult> {
                 ClientRequestResult result = (ClientRequestResult) inStream.readObject();
 
                 System.out.println("risultato ottenuto");
+
                 if (result != null) {
                     if (result == ClientRequestResult.SUCCESS) {
                         switch (clientRequestType) {
@@ -63,8 +66,10 @@ public class ClientService implements Callable<ClientRequestResult> {
                                 riceviMessaggi();
                         }
                         return ClientRequestResult.SUCCESS;
+
                     } else if (result == ClientRequestResult.FAILED_BY_CREDENTIALS) {
                         return ClientRequestResult.FAILED_BY_CREDENTIALS;
+
                     } else {
                         return ClientRequestResult.ERROR;
                     }
@@ -72,8 +77,7 @@ public class ClientService implements Callable<ClientRequestResult> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (ConnectException e) {
             return ClientRequestResult.FAILED_BY_SERVER_DOWN;
         }
 
@@ -97,20 +101,21 @@ public class ClientService implements Callable<ClientRequestResult> {
     private void invioMessaggi(List<Email> email) {
         List<ValidEmail> validEmailToSend = new ArrayList<>();
 
-        for (Email e : email) {
-            ValidEmail toAdd = new ValidEmail(e.getSender(),
-                    e.getRecipients(),
-                    e.getSubject(),
-                    e.getSize(),
-                    e.getDate(),
-                    e.getTextMessage());
-            validEmailToSend.add(toAdd);
+        if(email != null) {
+            for (Email e : email) {
+                ValidEmail toAdd = new ValidEmail(e.getSender(),
+                        e.getRecipients(),
+                        e.getSubject(),
+                        e.getSize(),
+                        e.getDate(),
+                        e.getTextMessage());
+                validEmailToSend.add(toAdd);
+            }
         }
 
         try {
             outStream.writeObject(validEmailToSend);
         } catch (IOException e) {
-            ViewFactory.viewAlert("Errore!", "Errore nell'invio dei messaggi. ");
             e.printStackTrace();
         }
     }
@@ -125,7 +130,6 @@ public class ClientService implements Callable<ClientRequestResult> {
             //TODO: da implementare solo se la lista non si aggiorna dopo loadEmail
             emailManager.refreshEmailList();
         } catch (IOException | ClassNotFoundException e) {
-            ViewFactory.viewAlert("Errore!", "Errore nella ricezione dei messaggi. ");
             e.printStackTrace();
         }
     }
