@@ -1,4 +1,4 @@
-package unito.controller.persistence;
+package unito.model;
 
 import java.io.Serializable;
 

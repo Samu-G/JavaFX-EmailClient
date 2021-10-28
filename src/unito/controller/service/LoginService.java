@@ -1,7 +1,6 @@
 package unito.controller.service;
 
 import unito.EmailManager;
-import unito.controller.EmailLoginResult;
 import unito.model.EmailAccount;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -15,7 +14,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 
-public class LoginService extends Service<EmailLoginResult> {
+public class LoginService extends Service<ClientRequestResult> {
 
     EmailAccount emailAccount;
     EmailManager emailManager;
@@ -25,7 +24,7 @@ public class LoginService extends Service<EmailLoginResult> {
         this.emailManager = emailManager;
     }
 
-    private EmailLoginResult login() {
+    private ClientRequestResult login() {
         try {
 
             emailManager.setLogString("connessione in corso...");
@@ -60,7 +59,7 @@ public class LoginService extends Service<EmailLoginResult> {
             e.printStackTrace();
         }
 
-        return EmailLoginResult.SUCCESS;
+        return ClientRequestResult.SUCCESS;
     }
 
 /*
@@ -102,10 +101,10 @@ public class LoginService extends Service<EmailLoginResult> {
 
 
     @Override
-    protected Task<EmailLoginResult> createTask() {
-        return new Task<EmailLoginResult>() {
+    protected Task<ClientRequestResult> createTask() {
+        return new Task<ClientRequestResult>() {
             @Override
-            protected EmailLoginResult call() throws Exception {
+            protected ClientRequestResult call() throws Exception {
                 return login();
             }
         };

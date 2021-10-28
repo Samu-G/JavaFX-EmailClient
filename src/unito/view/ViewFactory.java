@@ -63,10 +63,8 @@ public class ViewFactory {
      */
     private void initializeView(BaseController baseController, String windowTitle){
         System.out.println("initializeView() called.");
-        //System.out.println("FXMLLoader is loading the fxml file...");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(baseController.getFxmlName()));
         fxmlLoader.setController(baseController);
-        //public abstract scene...
         Parent parent;
         try {
             parent = fxmlLoader.load();
@@ -79,7 +77,6 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.setTitle(windowTitle);
         stage.show();
-        //System.out.println("Done! Showing the window \nadding stage to activeStages...\n\n");
         activeStages.add(stage);
     }
 

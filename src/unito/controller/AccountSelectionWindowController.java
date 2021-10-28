@@ -84,7 +84,6 @@ public class AccountSelectionWindowController extends BaseController implements 
         accountPicker.setValue(emailManager.getCurrentAccount());
     }
 
-
     /**
      * Attenzione a questo initlialize
      *

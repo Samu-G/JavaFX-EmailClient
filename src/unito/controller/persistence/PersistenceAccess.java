@@ -1,6 +1,6 @@
 package unito.controller.persistence;
 
-import unito.model.EmailAccount;
+import unito.model.ValidAccount;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,38 +14,33 @@ public class PersistenceAccess {
     private static String VALID_ACCOUNTS_LOCATION = ".validAccounts.ser";
     private static Encoder encoder = new Encoder();
 
-
     /**
      * Legge il file di persistenza salvato nella locazione indicata da VALID_ACCOUNT_LOCATION e restituisce la lista degli account letti dal file
      */
-    public static List<ValidAccount> loadFromPersistence() {
+    public static List<ValidAccount> loadFromPersistenceValidAccount() {
 
         List<ValidAccount> resultList = new ArrayList<>();
 
-        //TODO: Esempi di account, da elliminare
-        for (int i = 0; i < 10; i++) {
-            resultList.add(
-                    new ValidAccount("prova@gmail.com" + i, "pinco" + i)
-            );
-        }
+        /* * Account salvati nel file di persistenza
+        /*
+        resultList.add(new ValidAccount("user1@email.com", "user1"));
+        resultList.add(new ValidAccount("user2@email.com", "user2"));
+        resultList.add(new ValidAccount("user3@email.com", "user3"));
+        */
 
-        /* Carico da File di persistenza gli account del client */
+        /* Carico dal File di persistenza gli account del client */
         try {
-            /* Apro un FileInputStream e leggo il file .validAccounts.ser */
             FileInputStream fileInputStream = new FileInputStream(VALID_ACCOUNTS_LOCATION);
-            /* Il file è composto da stringhe di testo che descrivono gli oggetti "ValidAccount" */
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            /* Leggo gli oggetti dallo stream con readObject() */
-            List<ValidAccount> persistedList = (List<ValidAccount>) objectInputStream.readObject();
+            resultList = (List<ValidAccount>) objectInputStream.readObject();
+
             /* Decripto le password di ogni account della lista */
-            decodePasswords(persistedList);
-            /* Aggiungo alla lista */
-            resultList.addAll(persistedList);
+            decodePasswords(resultList);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        /* Ritorno la lista di account salvati nel file di oggetti .valdAccounts.ser */
         return resultList;
     }
 
