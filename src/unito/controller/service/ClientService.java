@@ -5,12 +5,12 @@ import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
-import unito.view.ViewFactory;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -104,7 +104,7 @@ public class ClientService implements Callable<ClientRequestResult> {
         if(email != null) {
             for (Email e : email) {
                 ValidEmail toAdd = new ValidEmail(e.getSender(),
-                        e.getRecipients(),
+                        e.getRecipientsArray(),
                         e.getSubject(),
                         e.getSize(),
                         e.getDate(),
@@ -116,7 +116,8 @@ public class ClientService implements Callable<ClientRequestResult> {
         try {
             outStream.writeObject(validEmailToSend);
         } catch (IOException e) {
-            e.printStackTrace();
+           //TODO: da sistemare questo bug
+            // e.printStackTrace();
         }
     }
 
@@ -130,7 +131,8 @@ public class ClientService implements Callable<ClientRequestResult> {
             //TODO: da implementare solo se la lista non si aggiorna dopo loadEmail
             emailManager.refreshEmailList();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            //TODO: da sistemare questo bug
+            //e.printStackTrace();
         }
     }
 

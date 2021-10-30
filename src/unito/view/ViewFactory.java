@@ -18,6 +18,10 @@ public class ViewFactory {
 
     private EmailManager emailManager;
     private ArrayList<Stage> activeStages;
+    public AccountSelectionWindowController accountSelectionWindowController;
+    public MainWindowController mainWindowController;
+    public ComposeWindowController composeWindowController;
+    public MessageWindowController messageWindowController;
 
     public ViewFactory(EmailManager emailManager) {
         this.emailManager = emailManager;
@@ -32,8 +36,8 @@ public class ViewFactory {
     public void showAccountSelectionWindow(){
         System.out.println("showAccountSelectionWindow() called.");
         System.out.println("initializing controller for the login view...");
-        BaseController controller = new AccountSelectionWindowController(emailManager, this, "AccountSelectionWindow.fxml");
-        initializeView(controller, "Seleziona l'account per la prima volta");
+        accountSelectionWindowController = new AccountSelectionWindowController(emailManager, this, "AccountSelectionWindow.fxml");
+        initializeView(accountSelectionWindowController, "Seleziona l'account per la prima volta");
     }
 
     /**
@@ -42,8 +46,8 @@ public class ViewFactory {
     public void showMainWindow(){
         System.out.println("showMainWindow() called.");
         System.out.println("initializing controller for the main window...");
-        BaseController controller = new MainWindowController(emailManager, this, "MainWindow.fxml");
-        initializeView(controller, "Client");
+        mainWindowController = new MainWindowController(emailManager, this, "MainWindow.fxml");
+        initializeView(mainWindowController, "Client");
     }
 
 
@@ -53,8 +57,15 @@ public class ViewFactory {
     public void showComposeWindow(){
         System.out.println("showComposeWindow() called.");
         System.out.println("initializing controller for the composing window...");
-        BaseController controller = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml");
-        initializeView(controller, "Componi un messaggio");
+        composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml");
+        initializeView(composeWindowController, "Componi un messaggio");
+    }
+
+    public void showMessageWindow(String windowTitle) {
+        System.out.println("showMessageWindow() called.");
+        System.out.println("initializing controller for the message window...");
+        messageWindowController = new MessageWindowController(emailManager, this, "MessageWindow.fxml");
+        initializeView(messageWindowController, windowTitle);
     }
 
     /**
@@ -83,13 +94,6 @@ public class ViewFactory {
     public void closeStage(Stage stageToClose) {
         activeStages.remove(stageToClose);
         stageToClose.close();
-    }
-
-    public void showMessageWindow(String windowTitle) {
-        System.out.println("showMessageWindow() called.");
-        System.out.println("initializing controller for the message window...");
-        BaseController controller = new MessageWindowController(emailManager, this, "MessageWindow.fxml");
-        initializeView(controller, windowTitle);
     }
 
     public static void viewAlert(String title, String contentText) {

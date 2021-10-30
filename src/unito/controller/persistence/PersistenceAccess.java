@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class PersistenceAccess {
 
-    private static String VALID_ACCOUNTS_LOCATION = "./validAccounts.ser";
+    private static String VALID_ACCOUNTS_LOCATION = "src/unito/controller/persistence/validAccounts.ser";
     private static Encoder encoder = new Encoder();
 
     /**
@@ -22,10 +22,10 @@ public class PersistenceAccess {
         List<ValidAccount> resultList = new ArrayList<>();
 
         /* * Account salvati nel file di persistenza */
-
-        resultList.add(new ValidAccount("user1@email.com", "user1"));
-        resultList.add(new ValidAccount("user2@email.com", "user2"));
-        resultList.add(new ValidAccount("user3@email.com", "user3"));
+//
+//        resultList.add(new ValidAccount("user1@email.com", "user1"));
+//        resultList.add(new ValidAccount("user2@email.com", "user2"));
+//        resultList.add(new ValidAccount("user3@email.com", "user3"));
 
 
         /* Carico dal File di persistenza gli account del client */

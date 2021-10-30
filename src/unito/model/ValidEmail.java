@@ -1,10 +1,6 @@
 package unito.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import unito.model.Email;
-
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -25,7 +21,7 @@ public class ValidEmail implements Serializable {
 
     private String sender;
 
-    private String recipients; //destinatari
+    private String [] recipients; //destinatari
 
     private String subject; //oggetto
 
@@ -35,7 +31,7 @@ public class ValidEmail implements Serializable {
 
     private String textMessage; //testo del messaggio
 
-    public ValidEmail(String sender, String recipients, String subject, String size, String date, String textMessage) {
+    public ValidEmail(String sender, String [] recipients, String subject, String size, String date, String textMessage) {
         this.sender = sender;
         this.recipients = recipients;
         this.subject = subject;
@@ -59,7 +55,7 @@ public class ValidEmail implements Serializable {
         return sender;
     }
 
-    public String getRecipients() {
+    public String [] getRecipients() {
         return recipients;
     }
 
@@ -86,7 +82,7 @@ public class ValidEmail implements Serializable {
         Email that = (Email) o;
         return  Objects.equals(sender, that.getSender()) &&
                 Objects.equals(subject, that.getSubject()) &&
-                Objects.equals(recipients, that.getRecipients()) &&
+                Objects.equals(recipients, that.getRecipientsArray()) &&
                 Objects.equals(date, that.getDate());
     }
 

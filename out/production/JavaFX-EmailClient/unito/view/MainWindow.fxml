@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="801.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -16,11 +16,6 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#showAccountSelectionAction" text="Cambia account" />
               <MenuItem mnemonicParsing="false" onAction="#quitAction" text="Quit" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Modifica">
-            <items>
-                  <MenuItem mnemonicParsing="false" onAction="#optionsAction" text="Opzioni" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Nuovo">

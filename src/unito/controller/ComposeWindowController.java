@@ -34,7 +34,7 @@ public class ComposeWindowController extends BaseController {
     private TextField recipientsTextField; // Value injected by FXMLLoader
 
     @FXML // fx:id="recipiantTextArea"
-    private TextArea recipiantTextArea; // Value injected by FXMLLoader
+    private TextArea messageTextArea; // Value injected by FXMLLoader
 
     private Email newEmail;
 
@@ -64,14 +64,7 @@ public class ComposeWindowController extends BaseController {
     }
 
     public void setRecipiantTextArea(String text) {
-        recipiantTextArea.setText(text);
-    }
-
-    @FXML
-    void checkRecipients() {
-        if (checkRecipientsTextField()) {
-            clearTextAreaAction();
-        }
+        messageTextArea.setText(text);
     }
 
     private boolean checkRecipientsTextField() {
@@ -100,50 +93,49 @@ public class ComposeWindowController extends BaseController {
     void sendMessageAction() {
         System.out.println("sendMessageAction() called.");
 
-        List<Email> toSend = new ArrayList<Email>();
+        List<Email> toSend = new ArrayList<>();
 
         if (checkRecipientsTextField()) {
-            for (String recipient : recipientsBuffer) {
-                toSend.add(new Email("triccheballacche@gmail.com",
-                        recipient,
-                        subjectTextField.getText(),
-                        recipiantTextArea.getText()));
-            }
 
-            //TODO: spedisci il messaggio
+            new Email(emailManager.getCurrentAccount().getAddress(),
+                    recipientsBuffer,
+                    subjectTextField.getText(),
+                    messageTextArea.getText()
+            );
 
             ClientService clientService = new ClientService(emailManager, ClientRequestType.INVIOMESSAGGIO, toSend);
-            FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(clientService);
 
-            Thread thread = new Thread(loginService);
+            FutureTask<ClientRequestResult> sendService = new FutureTask<>(clientService);
+
+            Thread thread = new Thread(sendService);
+
             thread.start();
 
-            //Viene restituito un risultato dal thread (PER QUESTO E'UN FUTURETASK)
             try {
-                ClientRequestResult r = loginService.get();
+
+                ClientRequestResult r = sendService.get();
 
                 switch (r) {
                     case SUCCESS:
-                        ViewFactory.viewAlert("Evviva!", "Login avvenuto con successo");
+                        ViewFactory.viewAlert("Successo", "Mail inviata con successo");
                         Stage stage = (Stage) recipientsTextField.getScene().getWindow();
                         viewFactory.closeStage(stage);
                         return;
 
                     case FAILED_BY_CREDENTIALS:
-                        ViewFactory.viewAlert("Attenzione", "Errore nelle credenziali");
+                        ViewFactory.viewAlert("Errore", "Errore nelle credenziali");
                         return;
 
                     case FAILED_BY_SERVER_DOWN:
-                        ViewFactory.viewAlert("Attenzione","Il server è spento");
+                        ViewFactory.viewAlert("Errore", "Il server è spento");
                         return;
                 }
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
-
         }
+
     }
 
     @FXML

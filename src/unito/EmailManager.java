@@ -21,7 +21,7 @@ public class EmailManager {
 
     public ObservableList<EmailAccount> emailAccounts;
     private SimpleObjectProperty<EmailAccount> currentAccount;
-    private ObservableList<Email> emailList;
+    public ObservableList<Email> emailList;
     private Email selectedMessage;
     private String logString;
 
@@ -72,7 +72,7 @@ public class EmailManager {
      * @param validEmailList QUESTA E' UNA LISTA DI VALIDEMAIL che restituisce loadPersistence
      */
     public void loadEmail(List<ValidEmail> validEmailList) {
-        if(validEmailList != null) {
+        if (validEmailList != null) {
             for (int i = 0; i < validEmailList.size(); i++) {
                 ValidEmail emailToLoad = validEmailList.get(i);
                 emailList.addAll(new Email(emailToLoad.getSender(), emailToLoad.getRecipients(), emailToLoad.getSubject(), emailToLoad.getTextMessage()));
@@ -98,25 +98,4 @@ public class EmailManager {
 
     }
 
-    public void replySelectedMessage() {
-        ViewFactory viewFactory = new ViewFactory(this);
-        viewFactory.showComposeWindow();
-        ComposeWindowController composeWindow = new ComposeWindowController(this, viewFactory, "ComposeWindow.fxml");
-
-        String recipients = getSelectedMessage().getRecipients();
-        composeWindow.setRecipientsBuffer(recipients);
-    }
-
-    public void forwardSelectedMessage() {
-        ViewFactory viewFactory = new ViewFactory(this);
-        viewFactory.showComposeWindow();
-        ComposeWindowController composeWindow = new ComposeWindowController(this, viewFactory, "ComposeWindow.fxml");
-
-        composeWindow.setSubjectTextField(getSelectedMessage().getSubject());
-        composeWindow.setRecipiantTextArea(getSelectedMessage().getTextMessage());
-    }
-
-    public void deleteSelectedMessage() {
-        emailList.remove(getSelectedMessage());
-    }
 }

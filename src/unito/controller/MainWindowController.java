@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import unito.EmailManager;
 import unito.model.Email;
 import unito.view.ViewFactory;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -57,11 +58,6 @@ public class MainWindowController extends BaseController implements Initializabl
     }
 
     @FXML
-    void optionsAction() {
-
-    }
-
-    @FXML
     void quitAction() {
         System.exit(0);
     }
@@ -76,22 +72,22 @@ public class MainWindowController extends BaseController implements Initializabl
         //TODO: da implementare
         Rispondi.setOnAction(e -> {
             System.out.println("Rispondi contextualMenuItem pressed.");
-            emailManager.replySelectedMessage();
+            replySelectedMessage();
         });
 
         Rispondi_a_tutti.setOnAction(e -> {
             System.out.println("Rispondi_a_tutti contextualMenuItem pressed.");
-            emailManager.replySelectedMessage();
+            replySelectedMessage();
         });
 
         Inoltra.setOnAction(e -> {
             System.out.println("Inoltra contextualMenuItem pressed.");
-            emailManager.forwardSelectedMessage();
+            forwardSelectedMessage();
         });
 
         Cancella.setOnAction(e -> {
             System.out.println("Cancella contextualMenuItem pressed.");
-            emailManager.deleteSelectedMessage();
+            deleteSelectedMessage();
         });
 
     }
@@ -100,8 +96,8 @@ public class MainWindowController extends BaseController implements Initializabl
         emailsTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    if(mouseEvent.getClickCount() == 2){
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    if (mouseEvent.getClickCount() == 2) {
 
                         System.out.println("Double clicked");
 
@@ -138,8 +134,39 @@ public class MainWindowController extends BaseController implements Initializabl
         emailsTableView.setContextMenu(new ContextMenu(Rispondi, Rispondi_a_tutti, Inoltra, Cancella));
 
         //set del contenuto della tabella
-        emailsTableView.setItems(this.emailManager.getEmailList() );
+        emailsTableView.setItems(emailManager.getEmailList());
     }
+
+    public void replySelectedMessage() {
+        if (emailManager.getSelectedMessage() != null) {
+            String recipients = emailManager.getSelectedMessage().getRecipients();
+            if (recipients != null) {
+                viewFactory.showComposeWindow();
+                viewFactory.composeWindowController.setRecipiantTextArea(recipients);
+            }
+        }
+    }
+
+    public void forwardSelectedMessage() {
+        if (emailManager.getSelectedMessage() != null) {
+            viewFactory.showComposeWindow();
+
+            if (viewFactory.composeWindowController != null) {
+                viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
+                viewFactory.composeWindowController.setRecipiantTextArea(emailManager.getSelectedMessage().getTextMessage());
+            }
+        }
+    }
+
+    public void deleteSelectedMessage() {
+        if(emailManager.getSelectedMessage() != null) {
+            emailManager.emailList.remove(emailManager.getSelectedMessage());
+            //TODO:refresh
+            emailsTableView.refresh();
+        }
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
