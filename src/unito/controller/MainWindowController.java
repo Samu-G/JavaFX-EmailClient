@@ -160,10 +160,17 @@ public class MainWindowController extends BaseController implements Initializabl
         if(emailManager.getSelectedMessage() != null) {
             emailManager.emailList.remove(emailManager.getSelectedMessage());
             //TODO:refresh
-            emailsTableView.refresh();
+            //emailsTableView.refresh();
+
+            // chiamata per il refresh
+            refreshEmailList();
         }
     }
 
+    //prova
+    public void refreshEmailList() {
+
+    }
 
 
     @Override
@@ -172,6 +179,5 @@ public class MainWindowController extends BaseController implements Initializabl
         setUpMessageSelection();
         setUpContextMenus();
     }
-
 
 }

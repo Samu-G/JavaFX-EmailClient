@@ -93,8 +93,9 @@ public class EmailManager {
         }
     }
 
+    /*prova
     public void refreshEmailList() {
 
-    }
+    } */
 
 }
