@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.model.Email;
 import unito.view.ViewFactory;
@@ -59,12 +60,9 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void quitAction() {
+        Stage stage = (Stage) emailsTableView.getScene().getWindow();
+        viewFactory.closeStage(stage);
         System.exit(0);
-    }
-
-    @FXML
-    void showAccountSelectionAction() {
-        viewFactory.showAccountSelectionWindow();
     }
 
     private void setUpContextMenus() {

@@ -75,7 +75,7 @@ public class EmailManager {
         if (validEmailList != null) {
             for (int i = 0; i < validEmailList.size(); i++) {
                 ValidEmail emailToLoad = validEmailList.get(i);
-                emailList.addAll(new Email(emailToLoad.getSender(), emailToLoad.getRecipients(), emailToLoad.getSubject(), emailToLoad.getTextMessage()));
+                emailList.add(new Email(emailToLoad));
             }
         }
     }
@@ -89,7 +89,7 @@ public class EmailManager {
     private void loadValidAccountFromPersistence(List<ValidAccount> validAccountList) {
         for (int i = 0; i < validAccountList.size(); i++) {
             ValidAccount accountToLoad = validAccountList.get(i);
-            emailAccounts.addAll(new EmailAccount(accountToLoad.getAddress(), accountToLoad.getPassword()));
+            emailAccounts.addAll(new EmailAccount(accountToLoad));
         }
     }
 

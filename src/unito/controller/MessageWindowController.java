@@ -24,7 +24,6 @@ public class MessageWindowController extends BaseController implements Initializ
 
     private static Email emailSelected;
 
-
     public MessageWindowController(EmailManager emailManager, ViewFactory viewFactory, String s) {
         super(emailManager, viewFactory, s);
     }

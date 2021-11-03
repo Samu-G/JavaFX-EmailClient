@@ -1,5 +1,7 @@
 package unito.controller.persistence;
 
+import javafx.collections.ObservableList;
+import unito.model.EmailAccount;
 import unito.model.ValidAccount;
 
 import java.io.*;
@@ -22,10 +24,10 @@ public class PersistenceAccess {
         List<ValidAccount> resultList = new ArrayList<>();
 
         /* * Account salvati nel file di persistenza */
-//
-//        resultList.add(new ValidAccount("user1@email.com", "user1"));
-//        resultList.add(new ValidAccount("user2@email.com", "user2"));
-//        resultList.add(new ValidAccount("user3@email.com", "user3"));
+
+        resultList.add(new ValidAccount("user1@email.com", "user1"));
+        resultList.add(new ValidAccount("user2@email.com", "user2"));
+        resultList.add(new ValidAccount("user3@email.com", "user3"));
 
 
         /* Carico dal File di persistenza gli account del client */
@@ -68,23 +70,28 @@ public class PersistenceAccess {
         }
     }
 
-
     /**
      * Salva nel file di persistenza gli account salvati nel client al momento della chiusura
      *
-     * @param validAccounts la lista di account da salvare nel file di pesistenza
+     * @param validAccounts la lista OSSERVABILE di account da salvare nel file di pesistenza
      */
-    public static void saveToPersistence(List<ValidAccount> validAccounts) {
+    public static void saveToPersistence(ObservableList<EmailAccount> validAccounts) {
+        List<ValidAccount> validAccountList = new ArrayList<ValidAccount>();
+        for (EmailAccount emailAccount : validAccounts) {
+            validAccountList.add(new ValidAccount(emailAccount.getAddress(), emailAccount.getPassword()
+            ));
+        }
         try {
             File file = new File(VALID_ACCOUNTS_LOCATION);
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            encodePasswords(validAccounts);
-            objectOutputStream.writeObject(validAccounts);
+            encodePasswords(validAccountList);
+            objectOutputStream.writeObject(validAccountList);
             objectOutputStream.close();
             fileOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

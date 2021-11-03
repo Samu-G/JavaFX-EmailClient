@@ -1,20 +1,9 @@
 package unito.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-/**
- * I messaggi di posta elettronica sono istanze di una classe Email
- * - ID univoco (hash) CE
- * - mittente CE
- * - destinatario CE
- * - argomento CE
- * - testo del messaggio
- * - data di spedizione
- * <p>
- * <p>
- * USARE LE P R O P E R T Y
- */
 public class ValidEmail implements Serializable {
 
     private static long identifier;
@@ -25,27 +14,25 @@ public class ValidEmail implements Serializable {
 
     private String subject; //oggetto
 
-    private String size;
+    private int size;
 
-    private String date; //data di creazione
+    private Date date; //data di creazione
 
     private String textMessage; //testo del messaggio
 
-    public ValidEmail(String sender, String [] recipients, String subject, String size, String date, String textMessage) {
+    public ValidEmail(String sender, String [] recipients, String subject, String size, Date date, String textMessage) {
+        setIdentifier();
         this.sender = sender;
         this.recipients = recipients;
         this.subject = subject;
-        this.size = size;
+        this.size = textMessage.length();
         this.date = date;
         this.textMessage = textMessage;
-        setIdentifier();
-        //System.out.println("email creata " + getSender());
     }
 
     public static long getIdentifier() {
         return identifier;
     }
-
 
     private void setIdentifier() {
         this.identifier = System.currentTimeMillis();
@@ -63,11 +50,11 @@ public class ValidEmail implements Serializable {
         return subject;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

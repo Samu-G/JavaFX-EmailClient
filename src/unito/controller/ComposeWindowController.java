@@ -36,12 +36,10 @@ public class ComposeWindowController extends BaseController {
     @FXML // fx:id="recipiantTextArea"
     private TextArea messageTextArea; // Value injected by FXMLLoader
 
-    private Email newEmail;
-
-    private boolean dirtyTextArea = true;
-
     /*array di destinatari*/
     private String[] recipientsBuffer;
+
+    private boolean dirtyTextArea = true;
 
     /**
      * @param emailManager
@@ -52,18 +50,15 @@ public class ComposeWindowController extends BaseController {
         super(emailManager, viewFactory, fxmlName);
     }
 
-    // AGGIUNTA: metodo per inizializzare il buffer dei destinatari
-    public void setRecipientsBuffer(String recipients) {
-        // TODO: IMPLEMENTARE QUANDO SI HANNO PIU' DESTINATARI, REALIZZARE UN PARSER CHE SCOMPONE LA STRINGA
-
-        recipientsBuffer[0] = recipients;
-    }
-
     public void setSubjectTextField(String text) {
         subjectTextField.setText(text);
     }
 
     public void setRecipiantTextArea(String text) {
+        messageTextArea.setText(text);
+    }
+
+    public void setMessageTextArea(String text) {
         messageTextArea.setText(text);
     }
 
@@ -73,7 +68,7 @@ public class ComposeWindowController extends BaseController {
         Pattern p = Pattern.compile(pattern);
 
         String text = this.recipientsTextField.getText();
-        recipientsBuffer = text.split(", ");
+        recipientsBuffer = text.split(", "); /*!!*/
         Matcher matcher;
 
         for (String recipiant : recipientsBuffer) {

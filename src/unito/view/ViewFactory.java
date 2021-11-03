@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Abstract controller class, used to manipulate View (initialize the Window, connect the model to the View, ... )
+ * class, used to manipulate View (initialize the Window, connect the model to the View, ... )
  */
 public class ViewFactory {
 
@@ -29,13 +29,11 @@ public class ViewFactory {
 
     }
 
-
     /**
      * Create controller for LoginWindow. Then, initialize the account selection window.
      */
     public void showAccountSelectionWindow(){
         System.out.println("showAccountSelectionWindow() called.");
-        System.out.println("initializing controller for the login view...");
         accountSelectionWindowController = new AccountSelectionWindowController(emailManager, this, "AccountSelectionWindow.fxml");
         initializeView(accountSelectionWindowController, "Seleziona l'account per la prima volta");
     }
@@ -45,25 +43,21 @@ public class ViewFactory {
      */
     public void showMainWindow(){
         System.out.println("showMainWindow() called.");
-        System.out.println("initializing controller for the main window...");
         mainWindowController = new MainWindowController(emailManager, this, "MainWindow.fxml");
         initializeView(mainWindowController, "Client");
     }
-
 
     /**
      * Create controller for ComposeWindow. Then, initialize the Composing window.
      */
     public void showComposeWindow(){
         System.out.println("showComposeWindow() called.");
-        System.out.println("initializing controller for the composing window...");
         composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml");
         initializeView(composeWindowController, "Componi un messaggio");
     }
 
     public void showMessageWindow(String windowTitle) {
         System.out.println("showMessageWindow() called.");
-        System.out.println("initializing controller for the message window...");
         messageWindowController = new MessageWindowController(emailManager, this, "MessageWindow.fxml");
         initializeView(messageWindowController, windowTitle);
     }

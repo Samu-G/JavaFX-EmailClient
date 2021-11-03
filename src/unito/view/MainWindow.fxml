@@ -14,15 +14,10 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <MenuItem mnemonicParsing="false" onAction="#showAccountSelectionAction" text="Cambia account" />
+                <MenuItem mnemonicParsing="false" onAction="#newMessageAction" text="Componi" />
               <MenuItem mnemonicParsing="false" onAction="#quitAction" text="Quit" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Nuovo">
-              <items>
-                <MenuItem mnemonicParsing="false" onAction="#newMessageAction" text="Componi" />
-              </items>
-            </Menu>
         </menus>
       </MenuBar>
       <TableView fx:id="emailsTableView" layoutY="25.0" prefHeight="538.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">

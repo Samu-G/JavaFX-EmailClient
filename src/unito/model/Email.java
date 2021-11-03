@@ -2,6 +2,7 @@ package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ public class Email {
 
     private SimpleStringProperty recipients; //destinatari
 
-    private String [] recipients_array;
+    private String[] recipients_array;
 
     private SimpleStringProperty subject; //argomento
 
@@ -33,39 +34,56 @@ public class Email {
 
     private SimpleStringProperty date; //data di spedizione
 
+    private Date effectiveDate;
+
     public String getTextMessage() {
         return textMessage.get();
     }
 
-    public SimpleStringProperty textMessageProperty() {
-        return textMessage;
-    }
-
     private SimpleStringProperty textMessage;
 
-    private boolean isRead;
-
-    public Email(String sender, String [] recipient, String subject, String textMessage) {
-        Date timeStamp = new Date(System.currentTimeMillis());
-        this.date = new SimpleStringProperty(timeStamp.toString());
+    public Email(String sender, String[] recipient, String subject, String textMessage) {
+        setIdentifier();
         this.sender = new SimpleStringProperty(sender);
+
         String s = new String();
         for (String rec : recipient) {
-                s.concat(rec + " ");
+            s.concat(rec + " ");
         }
         this.recipients = new SimpleStringProperty(s);
         this.recipients_array = recipient;
         this.subject = new SimpleStringProperty(subject);
+        this.size = new SimpleStringProperty(Integer.toString(textMessage.length()));
+        this.effectiveDate = new Date();
+        this.date = new SimpleStringProperty(new Date().toString());
         this.textMessage = new SimpleStringProperty(textMessage);
-        this.size = new SimpleStringProperty("0");
-        this.isRead = false;
+    }
+
+    public Email(ValidEmail validEmail) {
+        this.identifier = validEmail.getIdentifier();
+        this.sender = new SimpleStringProperty(validEmail.getSender());
+
+        String s = new String();
+        for (String rec : validEmail.getRecipients()) {
+            s.concat(rec + " ");
+        }
+        this.recipients = new SimpleStringProperty(s);
+        this.recipients_array = validEmail.getRecipients();
+        this.subject = new SimpleStringProperty(validEmail.getSubject());
+        this.size = new SimpleStringProperty(Integer.toString(validEmail.getSize()));
+        this.date = new SimpleStringProperty(validEmail.getDate().toString());
+        this.textMessage = new SimpleStringProperty(validEmail.getTextMessage());
+    }
+
+    private void setIdentifier() {
+        this.identifier = System.currentTimeMillis();
     }
 
     public String getSender() {
         return sender.get();
     }
 
-    public String [] getRecipientsArray() {
+    public String[] getRecipientsArray() {
         return this.recipients_array;
     }
 
@@ -81,20 +99,12 @@ public class Email {
         return size.get();
     }
 
-    public String getDate() {
-        return date.get();
+    public Date getDate() {
+        return effectiveDate;
     }
 
     public static long getIdentifier() {
         return identifier;
-    }
-
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setRead(boolean read) {
-        isRead = read;
     }
 
     @Override
@@ -102,8 +112,7 @@ public class Email {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Email that = (Email) o;
-        return isRead == that.isRead &&
-                Objects.equals(sender, that.sender) &&
+        return  Objects.equals(sender, that.sender) &&
                 Objects.equals(subject, that.subject) &&
                 Objects.equals(recipients, that.recipients) &&
                 Objects.equals(date, that.date);

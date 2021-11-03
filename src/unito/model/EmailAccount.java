@@ -19,11 +19,18 @@ public class EmailAccount {
 
     @Override
     public String toString() {
-        return "Address: " + address.get() + "\nPassowrd: " + password.get();
+        System.out.println( "Creato un nuovo EmailAccount\nADRESS: " + address.get() + "\nPASSWORD: " + password.get() );
+        return address.get();
     }
 
     public EmailAccount(String address, String password) {
         this.address = new SimpleStringProperty(address);
         this.password = new SimpleStringProperty(password);
     }
+
+    public EmailAccount(ValidAccount validAccount) {
+        this.address = new SimpleStringProperty(validAccount.getAddress());
+        this.password = new SimpleStringProperty(validAccount.getPassword());
+    }
+
 }
