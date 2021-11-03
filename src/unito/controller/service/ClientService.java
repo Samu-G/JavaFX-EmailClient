@@ -130,8 +130,7 @@ public class ClientService implements Callable<ClientRequestResult> {
             validEmailToRecive = (List<ValidEmail>) inStream.readObject();
             emailManager.loadEmail(validEmailToRecive);
             //TODO: da implementare solo se la lista non si aggiorna dopo loadEmail
-
-            //emailManager.refreshEmailList();
+            emailManager.refreshEmailList();
         } catch (IOException | ClassNotFoundException e) {
             //TODO: da sistemare questo bug
             //e.printStackTrace();

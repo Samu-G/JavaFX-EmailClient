@@ -163,15 +163,9 @@ public class MainWindowController extends BaseController implements Initializabl
             //emailsTableView.refresh();
 
             // chiamata per il refresh
-            refreshEmailList();
+            emailManager.refreshEmailList();
         }
     }
-
-    //prova
-    public void refreshEmailList() {
-
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
