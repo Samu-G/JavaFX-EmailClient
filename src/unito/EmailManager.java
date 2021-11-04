@@ -4,12 +4,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import unito.controller.ComposeWindowController;
+import unito.controller.service.ClientService;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -93,7 +95,7 @@ public class EmailManager {
         }
     }
 
-
+    //prova
     public void refreshEmailList() {
 
     }

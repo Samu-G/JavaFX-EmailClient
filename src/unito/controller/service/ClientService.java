@@ -1,6 +1,7 @@
 package unito.controller.service;
 
 import unito.EmailManager;
+import unito.controller.MainWindowController;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
