@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -33,7 +34,7 @@ public class ComposeWindowController extends BaseController {
     @FXML // fx:id="recipientsTextField"
     private TextField recipientsTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="recipiantTextArea"
+    @FXML // fx:id="messageTextArea"
     private TextArea messageTextArea; // Value injected by FXMLLoader
 
     /*array di destinatari*/
@@ -91,8 +92,8 @@ public class ComposeWindowController extends BaseController {
         List<Email> toSend = new ArrayList<>();
 
         if (checkRecipientsTextField()) {
-
-            new Email(emailManager.getCurrentAccount().getAddress(),
+            
+            new Email(emailManager.getCurrentAccount().getAddress(), 
                     recipientsBuffer,
                     subjectTextField.getText(),
                     messageTextArea.getText()
