@@ -81,7 +81,6 @@ public class ComposeWindowController extends BaseController {
                 return false;
             }
         }
-        System.out.println("no error in email");
         return true;
     }
 
@@ -89,15 +88,18 @@ public class ComposeWindowController extends BaseController {
     void sendMessageAction() {
         System.out.println("sendMessageAction() called.");
 
-        List<Email> toSend = new ArrayList<>();
+        Email toSend;
 
         if (checkRecipientsTextField()) {
-            
-            new Email(emailManager.getCurrentAccount().getAddress(), 
+
+            toSend = new Email(emailManager.getCurrentAccount().getAddress(),
                     recipientsBuffer,
                     subjectTextField.getText(),
                     messageTextArea.getText()
             );
+
+            System.out.println(toSend.getRecipientsArray().length);
+
 
             ClientService clientService = new ClientService(emailManager, ClientRequestType.INVIOMESSAGGIO, toSend);
 

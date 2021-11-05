@@ -1,7 +1,6 @@
 package unito.controller.service;
 
 import unito.EmailManager;
-import unito.controller.MainWindowController;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
@@ -11,7 +10,6 @@ import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -24,11 +22,11 @@ public class ClientService implements Callable<ClientRequestResult> {
     private EmailAccount currentAccount;
     private Socket socket;
     private ClientRequestType clientRequestType;
-    private List<Email> emailToSend;
+    private Email emailToSend;
     private ObjectOutputStream outStream;
     private ObjectInputStream inStream;
 
-    public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, List<Email> toSend) {
+    public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
         this.emailManager = emailManager;
         this.currentAccount = emailManager.getCurrentAccount();
         this.myCredentials = new ValidAccount(currentAccount.getAddress(), currentAccount.getPassword());
@@ -52,23 +50,32 @@ public class ClientService implements Callable<ClientRequestResult> {
 
                 outStream.writeObject(myCredentials);
 
-                ClientRequestResult result = (ClientRequestResult) inStream.readObject();
+                ClientRequestResult authenticationResult = (ClientRequestResult) inStream.readObject();
+                boolean operationResult = false;
 
                 System.out.println("risultato ottenuto");
 
-                if (result != null) {
-                    if (result == ClientRequestResult.SUCCESS) {
+                if (authenticationResult != null) {
+                    if (authenticationResult == ClientRequestResult.SUCCESS) {
                         switch (clientRequestType) {
                             case HANDSHAKING:
-                                handshaking();
+                                operationResult = handshaking();
+                                break;
                             case INVIOMESSAGGIO:
-                                invioMessaggi(emailToSend);
+                                operationResult = invioMessaggio(emailToSend);
+                                break;
                             case RICEVIMESSAGGIO:
-                                riceviMessaggi();
+                                operationResult = riceviMessaggi();
+                                break;
                         }
-                        return ClientRequestResult.SUCCESS;
 
-                    } else if (result == ClientRequestResult.FAILED_BY_CREDENTIALS) {
+                        if (operationResult) {
+                            return ClientRequestResult.SUCCESS;
+                        } else {
+                            return ClientRequestResult.ERROR;
+                        }
+
+                    } else if (authenticationResult == ClientRequestResult.FAILED_BY_CREDENTIALS) {
                         return ClientRequestResult.FAILED_BY_CREDENTIALS;
 
                     } else {
@@ -86,55 +93,78 @@ public class ClientService implements Callable<ClientRequestResult> {
         return null;
     }
 
-    private void handshaking() {
+    private boolean handshaking() {
         try {
             outStream.writeObject(clientRequestType);
-            System.out.println("prima");
+
             List<ValidEmail> myEmail = (List<ValidEmail>) inStream.readObject();
-            System.out.println("dopo");
-            /* Mi trasferisco in emailManager le email appena scaricate dal server */
-            emailManager.loadEmail(myEmail);
+
+            if(myEmail != null) {
+                emailManager.loadEmail(myEmail);
+                System.out.println("Handshaking completed.");
+                return true;
+            } else {
+                System.out.println("Handshaking FAILED. List<ValidEmail> is null.");
+                return false;
+            }
+
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
+            System.out.println("Handshaking FAILED.");
+            return false;
         }
     }
 
-    private void invioMessaggi(List<Email> email) {
-        List<ValidEmail> validEmailToSend = new ArrayList<>();
-
-        if(email != null) {
-            for (Email e : email) {
-                ValidEmail toAdd = new ValidEmail(e.getSender(),
-                        e.getRecipientsArray(),
-                        e.getSubject(),
-                        e.getSize(),
-                        e.getDate(),
-                        e.getTextMessage());
-                validEmailToSend.add(toAdd);
-            }
-        }
-
+    private boolean invioMessaggio(Email email) {
         try {
-            outStream.writeObject(validEmailToSend);
+            outStream.writeObject(clientRequestType);
+
+            ValidEmail validEmailToSend;
+
+            if (email != null) {
+                validEmailToSend = new ValidEmail(email.getSender(),
+                        email.getRecipientsArray(),
+                        email.getSubject(),
+                        email.getSize(),
+                        email.getDate(),
+                        email.getTextMessage());
+                try {
+                    outStream.writeObject(validEmailToSend);
+                    System.out.println("InvioMessaggio completed.");
+                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    outStream.writeObject(null);
+                    System.out.println("InvioMessaggio FAILED.");
+                    return false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException e) {
-           //TODO: da sistemare questo bug
-            // e.printStackTrace();
+            e.printStackTrace();
         }
+        return false;
     }
 
-    private void riceviMessaggi() {
+    private boolean riceviMessaggi() {
 
         List<ValidEmail> validEmailToRecive;
 
         try {
             validEmailToRecive = (List<ValidEmail>) inStream.readObject();
             emailManager.loadEmail(validEmailToRecive);
-            //TODO: da implementare solo se la lista non si aggiorna dopo loadEmail
-            emailManager.refreshEmailList();
+            System.out.println("RiceviMessaggi completed.");
+            return true;
         } catch (IOException | ClassNotFoundException e) {
-            //TODO: da sistemare questo bug
-            //e.printStackTrace();
+            e.printStackTrace();
         }
+        System.out.println("RiceviMessaggi FAILED.");
+        return false;
+
     }
 
     private void openStream() {
