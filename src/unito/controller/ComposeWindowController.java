@@ -55,7 +55,7 @@ public class ComposeWindowController extends BaseController {
         subjectTextField.setText(text);
     }
 
-    public void setRecipientTextArea(String text) {
+    public void setRecipiantTextArea(String text) {
         messageTextArea.setText(text);
     }
 

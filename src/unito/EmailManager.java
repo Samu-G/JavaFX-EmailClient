@@ -14,6 +14,7 @@ import unito.model.EmailAccount;
 import unito.view.ViewFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,9 +98,21 @@ public class EmailManager {
         }
     }
 
-    //prova
+    // prima implementazione del refresh dovuta a una delete
     public void refreshEmailList() {
+        /*System.out.println("RefreshEmailList called\n");
+        List<ValidEmail> validEmailList = new ArrayList<>();
 
+        for (Email email: emailList) {
+            validEmailList.add(new ValidEmail(email.getSender(),
+                    email.getRecipientsArray(),
+                    email.getSubject(),
+                    email.getSize(),
+                    email.getDate(),
+                    email.getTextMessage()));
+        }
+
+        loadEmail(validEmailList);*/
     }
 
 }

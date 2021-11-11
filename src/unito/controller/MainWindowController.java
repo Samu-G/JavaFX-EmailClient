@@ -141,7 +141,7 @@ public class MainWindowController extends BaseController implements Initializabl
             String recipients = emailManager.getSelectedMessage().getRecipients();
             if (recipients != null) {
                 viewFactory.showComposeWindow();
-                viewFactory.composeWindowController.setRecipientTextArea(recipients);
+                viewFactory.composeWindowController.setRecipiantTextArea(recipients);
             }
         }
     }
@@ -152,19 +152,19 @@ public class MainWindowController extends BaseController implements Initializabl
 
             if (viewFactory.composeWindowController != null) {
                 viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setRecipientTextArea(emailManager.getSelectedMessage().getTextMessage());
+                viewFactory.composeWindowController.setRecipiantTextArea(emailManager.getSelectedMessage().getTextMessage());
             }
         }
     }
 
     public void deleteSelectedMessage() {
+        //System.out.println("chiamata alla delete");
         if(emailManager.getSelectedMessage() != null) {
             emailManager.emailList.remove(emailManager.getSelectedMessage());
             //TODO:refresh
             //emailsTableView.refresh();
             // chiamata per il refresh
             emailManager.refreshEmailList();
-
         }
     }
 
