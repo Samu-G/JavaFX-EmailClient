@@ -76,6 +76,7 @@ public class Email {
     }
 
     private void setIdentifier() {
+        //TODO(MB): Perchè millisecondi per l'identificatore?
         this.identifier = System.currentTimeMillis();
     }
 
@@ -121,7 +122,7 @@ public class Email {
     @Override
     public String toString() {
         return "Sender: " + getSender() + "\n" +
-                "Reciver: " + getRecipientsArray() + "\n" +
+                "Receiver: " + getRecipientsArray() + "\n" +
                 "Date: " + getDate() + "\n" +
                 "Text: " + textMessage.get() + "\n" +
                 "Identifier is: " + getIdentifier() + "\n";

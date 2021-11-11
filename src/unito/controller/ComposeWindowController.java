@@ -55,7 +55,7 @@ public class ComposeWindowController extends BaseController {
         subjectTextField.setText(text);
     }
 
-    public void setRecipiantTextArea(String text) {
+    public void setRecipientTextArea(String text) {
         messageTextArea.setText(text);
     }
 
@@ -72,9 +72,9 @@ public class ComposeWindowController extends BaseController {
         recipientsBuffer = text.split(", "); /*!!*/
         Matcher matcher;
 
-        for (String recipiant : recipientsBuffer) {
-            System.out.println(recipiant);
-            matcher = p.matcher(recipiant);
+        for (String recipient : recipientsBuffer) {
+            System.out.println(recipient);
+            matcher = p.matcher(recipient);
             if (!matcher.matches()) {
                 System.out.println("email parser error!");
                 ViewFactory.viewAlert("Attenzione!", "Controllare il campo destinatari");

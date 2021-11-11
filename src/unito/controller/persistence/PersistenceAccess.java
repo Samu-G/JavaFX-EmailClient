@@ -37,6 +37,7 @@ public class PersistenceAccess {
             resultList = (List<ValidAccount>) objectInputStream.readObject();
 
             /* Decripto le password di ogni account della lista */
+            //TODO(MB): Decode ed Encode non molto chiari
             decodePasswords(resultList);
 
         } catch (Exception e) {
@@ -73,7 +74,7 @@ public class PersistenceAccess {
     /**
      * Salva nel file di persistenza gli account salvati nel client al momento della chiusura
      *
-     * @param validAccounts la lista OSSERVABILE di account da salvare nel file di pesistenza
+     * @param validAccounts la lista OSSERVABILE di account da salvare nel file di persistenza
      */
     public static void saveToPersistence(ObservableList<EmailAccount> validAccounts) {
         List<ValidAccount> validAccountList = new ArrayList<ValidAccount>();

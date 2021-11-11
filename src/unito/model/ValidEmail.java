@@ -75,7 +75,7 @@ public class ValidEmail implements Serializable {
 
     @Override
     public String toString() {
-        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Reciver: " + getRecipients() + "\n" +
+        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Receiver: " + getRecipients() + "\n" +
                 "Subject: " + getSubject() + "\n" + "Size: " + getSize() + "\n" + "Date: " + getDate() +"\n" + "Text: " + getTextMessage() +"\n";
     }
 }

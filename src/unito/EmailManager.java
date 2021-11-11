@@ -1,9 +1,11 @@
 package unito;
 
+import com.sun.tools.javac.Main;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import unito.controller.ComposeWindowController;
+import unito.controller.MainWindowController;
 import unito.controller.service.ClientService;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * Questa classe contiene:
  * - le due observableList di emailAccount e di Email
- * - funzioni per trasformare validAccount e vaildEmail in Account ed Email (serializzabili -> non serializzabili)
+ * - funzioni per trasformare validAccount e validEmail in Account ed Email (serializzabili -> non serializzabili)
  */
 public class EmailManager {
 
@@ -38,7 +40,7 @@ public class EmailManager {
         currentAccount.set(emailAccount);
         System.out.println("**********" +
                 "\nsetCurrentAccount() called." +
-                "\nADRESS: " + emailAccount.getAddress() +
+                "\nADDRESS: " + emailAccount.getAddress() +
                 "\nPASSWORD: " + emailAccount.getPassword() +
                 "\n**********");
     }
@@ -68,7 +70,7 @@ public class EmailManager {
     }
 
     /**
-     * Trasforma gli oggeti validEmail (serializzabili) in oggetti Email (non serializzabili)
+     * Trasforma gli oggetti validEmail (serializzabili) in oggetti Email (non serializzabili)
      * e li salva all'interno di una ObservableList.
      *
      * @param validEmailList QUESTA E' UNA LISTA DI VALIDEMAIL che restituisce loadPersistence

@@ -19,8 +19,8 @@ public class MessageWindowController extends BaseController implements Initializ
     @FXML // fx:id="recipientsTextField"
     private TextField recipientsTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="recipiantTextArea"
-    private TextArea recipiantTextArea; // Value injected by FXMLLoader
+    @FXML // fx:id="recipientTextArea"
+    private TextArea recipientTextArea; // Value injected by FXMLLoader
 
     private static Email emailSelected;
 
@@ -32,6 +32,6 @@ public class MessageWindowController extends BaseController implements Initializ
     public void initialize(URL url, ResourceBundle resourceBundle) {
         subjectTextField.setText(emailManager.getSelectedMessage().getSubject());
         recipientsTextField.setText(emailManager.getSelectedMessage().getRecipients());
-        recipiantTextArea.setText(emailManager.getSelectedMessage().getTextMessage());
+        recipientTextArea.setText(emailManager.getSelectedMessage().getTextMessage());
     }
 }

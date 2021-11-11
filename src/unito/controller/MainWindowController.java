@@ -59,6 +59,7 @@ public class MainWindowController extends BaseController implements Initializabl
     }
 
     @FXML
+    //TODO(MB): Vogliamo solo chiudere l'app oppure implementare la possibilità di cambiare account?
     void quitAction() {
         Stage stage = (Stage) emailsTableView.getScene().getWindow();
         viewFactory.closeStage(stage);
@@ -140,7 +141,7 @@ public class MainWindowController extends BaseController implements Initializabl
             String recipients = emailManager.getSelectedMessage().getRecipients();
             if (recipients != null) {
                 viewFactory.showComposeWindow();
-                viewFactory.composeWindowController.setRecipiantTextArea(recipients);
+                viewFactory.composeWindowController.setRecipientTextArea(recipients);
             }
         }
     }
@@ -151,7 +152,7 @@ public class MainWindowController extends BaseController implements Initializabl
 
             if (viewFactory.composeWindowController != null) {
                 viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setRecipiantTextArea(emailManager.getSelectedMessage().getTextMessage());
+                viewFactory.composeWindowController.setRecipientTextArea(emailManager.getSelectedMessage().getTextMessage());
             }
         }
     }
@@ -161,9 +162,9 @@ public class MainWindowController extends BaseController implements Initializabl
             emailManager.emailList.remove(emailManager.getSelectedMessage());
             //TODO:refresh
             //emailsTableView.refresh();
-
             // chiamata per il refresh
             emailManager.refreshEmailList();
+
         }
     }
 
