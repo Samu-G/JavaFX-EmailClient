@@ -76,7 +76,6 @@ public class Email {
     }
 
     private void setIdentifier() {
-        //TODO(MB): Perchè millisecondi per l'identificatore?
         this.identifier = System.currentTimeMillis();
     }
 
