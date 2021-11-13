@@ -44,7 +44,7 @@ public class AccountSelectionWindowController extends BaseController implements 
         /* Qui viene avviato il task volto a collegarsi e scaricare "l'EmailBean" dal server */
         ClientService clientService = new ClientService(emailManager, ClientRequestType.HANDSHAKING, null);
         /* Viene avviato un thread apposito per gestire questo lavoro in concorrenza */
-        FutureTask<ClientRequestResult> loginService = new FutureTask<ClientRequestResult>(clientService);
+        FutureTask<ClientRequestResult> loginService = new FutureTask<>(clientService);
 
         Thread thread = new Thread(loginService);
         thread.start();

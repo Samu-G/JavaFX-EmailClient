@@ -4,9 +4,13 @@ import com.sun.tools.javac.Main;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import unito.controller.ComposeWindowController;
 import unito.controller.MainWindowController;
+import unito.controller.service.ClientRequestResult;
+import unito.controller.service.ClientRequestType;
 import unito.controller.service.ClientService;
+import unito.controller.service.RefreshService;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
@@ -16,6 +20,7 @@ import unito.view.ViewFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * Questa classe contiene:
@@ -25,16 +30,33 @@ import java.util.List;
 public class EmailManager {
 
     public ObservableList<EmailAccount> emailAccounts;
+    public List<String> addressesNotFoundedBuffer;
     private SimpleObjectProperty<EmailAccount> currentAccount;
     public ObservableList<Email> emailList;
     private Email selectedMessage;
     private String logString;
+    public Thread refreshThread;
+    private RefreshService refreshService;
+
 
     public EmailManager(List<ValidAccount> validAccountList) {
         this.emailAccounts = FXCollections.observableArrayList();
         this.currentAccount = new SimpleObjectProperty<>();
         this.emailList = FXCollections.observableArrayList();
         loadValidAccountFromPersistence(validAccountList);
+
+    }
+
+    public void turnOnAutoRefresh(long refreshRate) {
+        if (refreshThread == null) {
+            refreshService = new RefreshService(this, refreshRate, true);
+            refreshThread = new Thread(refreshService);
+        }
+        refreshThread.start();
+    }
+
+    public void turnOffAutoRefresh() {
+        refreshThread.interrupt();
     }
 
     public void setCurrentAccount(EmailAccount emailAccount) {
@@ -98,21 +120,42 @@ public class EmailManager {
         }
     }
 
-    // prima implementazione del refresh dovuta a una delete
-    public void refreshEmailList() {
-        /*System.out.println("RefreshEmailList called\n");
-        List<ValidEmail> validEmailList = new ArrayList<>();
-
-        for (Email email: emailList) {
-            validEmailList.add(new ValidEmail(email.getSender(),
-                    email.getRecipientsArray(),
-                    email.getSubject(),
-                    email.getSize(),
-                    email.getDate(),
-                    email.getTextMessage()));
-        }
-
-        loadEmail(validEmailList);*/
+    public void manualRefresh() {
+        RefreshService refreshService = new RefreshService(this, 0, false);
+        Thread t = new Thread(refreshService);
+        t.start();
     }
 
+    public void setRefreshSpeed(long refreshRate) {
+        if (refreshService == null) {
+            turnOnAutoRefresh(refreshRate);
+        }
+        refreshService.setRefreshRate(refreshRate);
+    }
+
+    public void deleteSelectedMessage() {
+        ClientService clientService = new ClientService(this, ClientRequestType.CANCELLAMESSAGGIO, selectedMessage);
+        FutureTask<ClientRequestResult> deleteService = new FutureTask<>(clientService);
+        Thread thread = new Thread(deleteService);
+        thread.start();
+        try {
+            System.out.println("prima");
+
+            ClientRequestResult r = deleteService.get();
+
+            System.out.println("dopo");
+
+            switch (r) {
+                case SUCCESS:
+                    ViewFactory.viewAlert("Cancellazione messaggio", "Cancellazione messaggio avvenuta con successo");
+                    break;
+
+                case ERROR, FAILED_BY_CREDENTIALS, FAILED_BY_SERVER_DOWN:
+                    ViewFactory.viewAlert("Cancellazione messaggio", "Errore nella comunicazione con il server");
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

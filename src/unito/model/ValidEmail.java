@@ -8,17 +8,19 @@ public class ValidEmail implements Serializable {
 
     private static long identifier;
 
-    private String sender;
+    private final String sender;
 
-    private String [] recipients; //destinatari
+    private final String [] recipients; //destinatari
 
-    private String subject; //oggetto
+    private final String subject; //oggetto
 
-    private int size;
+    private final int size;
 
-    private Date date; //data di creazione
+    private final Date date; //data di creazione
 
-    private String textMessage; //testo del messaggio
+    private final String textMessage; //testo del messaggio
+
+    /*Constructor*/
 
     public ValidEmail(String sender, String [] recipients, String subject, String size, Date date, String textMessage) {
         setIdentifier();
@@ -30,12 +32,10 @@ public class ValidEmail implements Serializable {
         this.textMessage = textMessage;
     }
 
+    /*Getter*/
+
     public static long getIdentifier() {
         return identifier;
-    }
-
-    private void setIdentifier() {
-        this.identifier = System.currentTimeMillis();
     }
 
     public String getSender() {
@@ -62,6 +62,14 @@ public class ValidEmail implements Serializable {
         return textMessage;
     }
 
+    /*Private Setter*/
+
+    private void setIdentifier() {
+        this.identifier = System.currentTimeMillis();
+    }
+
+    /*Aux*/
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +83,7 @@ public class ValidEmail implements Serializable {
 
     @Override
     public String toString() {
-        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Receiver: " + getRecipients() + "\n" +
+        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Reciver: " + getRecipients() + "\n" +
                 "Subject: " + getSubject() + "\n" + "Size: " + getSize() + "\n" + "Date: " + getDate() +"\n" + "Text: " + getTextMessage() +"\n";
     }
 }

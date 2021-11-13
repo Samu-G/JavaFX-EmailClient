@@ -23,11 +23,6 @@ public class PersistenceAccess {
 
         List<ValidAccount> resultList = new ArrayList<>();
 
-        /* * Account salvati nel file di persistenza */
-
-        resultList.add(new ValidAccount("user1@email.com", "user1"));
-        resultList.add(new ValidAccount("user2@email.com", "user2"));
-        resultList.add(new ValidAccount("user3@email.com", "user3"));
 
 
         /* Carico dal File di persistenza gli account del client */
@@ -40,7 +35,14 @@ public class PersistenceAccess {
             //TODO(MB): Decode ed Encode non molto chiari
             decodePasswords(resultList);
 
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            /* * Account salvati nel file di persistenza */
+            System.out.println("File NOT FOUND! Loading demo...");
+            resultList.add(new ValidAccount("user1@email.com", "user1"));
+            resultList.add(new ValidAccount("user2@email.com", "user2"));
+            resultList.add(new ValidAccount("user3@email.com", "user3"));
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

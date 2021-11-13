@@ -2,37 +2,27 @@ package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * I messaggi di posta elettronica sono istanze di una classe Email
- * - ID univoco (hash) CE
- * - mittente CE
- * - destinatario CE
- * - argomento CE
- * - testo del messaggio
- * - data di spedizione
- * <p>
- * <p>
- * USARE LE P R O P E R T Y
- */
 public class Email {
 
     private static long identifier;
 
-    private SimpleStringProperty sender; //mittente
+    private final SimpleStringProperty sender; //mittente
 
-    private SimpleStringProperty recipients; //destinatari
+    private final SimpleStringProperty recipients; //destinatari
 
-    private String[] recipients_array;
+    private final String[] recipients_array;
 
-    private SimpleStringProperty subject; //argomento
+    private final SimpleStringProperty subject; //argomento
 
-    private SimpleStringProperty size;
+    private final SimpleStringProperty size;
 
-    private SimpleStringProperty date; //data di spedizione
+    private final SimpleStringProperty date; //data di spedizione
+
+    private final SimpleStringProperty textMessage;
 
     private Date effectiveDate;
 
@@ -40,22 +30,23 @@ public class Email {
         return textMessage.get();
     }
 
-    private SimpleStringProperty textMessage;
+    /*Constructor*/
 
     public Email(String sender, String[] recipient, String subject, String textMessage) {
         setIdentifier();
         this.sender = new SimpleStringProperty(sender);
 
-        String s = new String();
+        String s = "";
         for (String rec : recipient) {
             s.concat(rec + " ");
         }
+
         this.recipients = new SimpleStringProperty(s);
         this.recipients_array = recipient;
         this.subject = new SimpleStringProperty(subject);
         this.size = new SimpleStringProperty(Integer.toString(textMessage.length()));
         this.effectiveDate = new Date();
-        this.date = new SimpleStringProperty(new Date().toString());
+        this.date = new SimpleStringProperty(this.effectiveDate.toString());
         this.textMessage = new SimpleStringProperty(textMessage);
     }
 
@@ -63,10 +54,11 @@ public class Email {
         this.identifier = validEmail.getIdentifier();
         this.sender = new SimpleStringProperty(validEmail.getSender());
 
-        String s = new String();
+        String s = "";
         for (String rec : validEmail.getRecipients()) {
-            s.concat(rec + " ");
+            s.concat(rec + ", ");
         }
+
         this.recipients = new SimpleStringProperty(s);
         this.recipients_array = validEmail.getRecipients();
         this.subject = new SimpleStringProperty(validEmail.getSubject());
@@ -75,10 +67,7 @@ public class Email {
         this.textMessage = new SimpleStringProperty(validEmail.getTextMessage());
     }
 
-    private void setIdentifier() {
-        //TODO(MB): Perchè millisecondi per l'identificatore?
-        this.identifier = System.currentTimeMillis();
-    }
+    /*Getter*/
 
     public String getSender() {
         return sender.get();
@@ -108,6 +97,12 @@ public class Email {
         return identifier;
     }
 
+    /*Aux*/
+
+    private void setIdentifier() {
+        this.identifier = System.currentTimeMillis();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,7 +117,7 @@ public class Email {
     @Override
     public String toString() {
         return "Sender: " + getSender() + "\n" +
-                "Receiver: " + getRecipientsArray() + "\n" +
+                "Reciver: " + Arrays.toString(getRecipientsArray()) + "\n" +
                 "Date: " + getDate() + "\n" +
                 "Text: " + textMessage.get() + "\n" +
                 "Identifier is: " + getIdentifier() + "\n";

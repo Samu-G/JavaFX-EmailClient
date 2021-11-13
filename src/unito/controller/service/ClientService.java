@@ -1,16 +1,19 @@
 package unito.controller.service;
 
+import org.jetbrains.annotations.NotNull;
 import unito.EmailManager;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
+import unito.view.ViewFactory;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -67,6 +70,8 @@ public class ClientService implements Callable<ClientRequestResult> {
                             case RICEVIMESSAGGIO:
                                 operationResult = riceviMessaggi();
                                 break;
+                            case CANCELLAMESSAGGIO:
+                                operationResult = cancellaMessaggio(emailToSend);
                         }
 
                         if (operationResult) {
@@ -99,7 +104,7 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             List<ValidEmail> myEmail = (List<ValidEmail>) inStream.readObject();
 
-            if(myEmail != null) {
+            if (myEmail != null) {
                 emailManager.loadEmail(myEmail);
                 System.out.println("Handshaking completed.");
                 return true;
@@ -122,24 +127,31 @@ public class ClientService implements Callable<ClientRequestResult> {
             ValidEmail validEmailToSend;
 
             if (email != null) {
-                validEmailToSend = new ValidEmail(email.getSender(),
-                        email.getRecipientsArray(),
-                        email.getSubject(),
-                        email.getSize(),
-                        email.getDate(),
-                        email.getTextMessage());
+
+                validEmailToSend = new ValidEmail(email.getSender(), email.getRecipientsArray(), email.getSubject(), email.getSize(), email.getDate(), email.getTextMessage());
+
                 try {
                     outStream.writeObject(validEmailToSend);
-                    System.out.println("InvioMessaggio completed.");
-                    return true;
-                } catch (IOException e) {
+
+                    System.out.println("Ricezione lista di indirizzi non trovati...");
+
+                    List<String> addressesNotFounded = (LinkedList<String>) inStream.readObject();
+
+                    if (!addressesNotFounded.isEmpty()) {
+                        emailManager.addressesNotFoundedBuffer = addressesNotFounded;
+                        return false;
+                    } else {
+                        emailManager.addressesNotFoundedBuffer = new LinkedList<>();
+                        return true;
+                    }
+
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             } else {
                 try {
                     outStream.writeObject(null);
                     System.out.println("InvioMessaggio FAILED.");
-                    return false;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -155,6 +167,8 @@ public class ClientService implements Callable<ClientRequestResult> {
         List<ValidEmail> validEmailToRecive;
 
         try {
+            outStream.writeObject(clientRequestType);
+
             validEmailToRecive = (List<ValidEmail>) inStream.readObject();
             emailManager.loadEmail(validEmailToRecive);
             System.out.println("RiceviMessaggi completed.");
@@ -165,6 +179,33 @@ public class ClientService implements Callable<ClientRequestResult> {
         System.out.println("RiceviMessaggi FAILED.");
         return false;
 
+    }
+
+    private boolean cancellaMessaggio(Email toDelete) {
+        boolean opResult = false;
+        try {
+            outStream.writeObject(clientRequestType);
+
+            ValidEmail validEmailToSend;
+
+            if (toDelete != null) {
+
+                validEmailToSend = new ValidEmail(toDelete.getSender(), toDelete.getRecipientsArray(), toDelete.getSubject(), toDelete.getSize(), toDelete.getDate(), toDelete.getTextMessage());
+
+                try {
+
+                    outStream.writeObject(validEmailToSend);
+                    opResult = (boolean) inStream.readObject();
+                    return opResult;
+
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void openStream() {

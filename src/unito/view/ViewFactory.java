@@ -26,7 +26,6 @@ public class ViewFactory {
     public ViewFactory(EmailManager emailManager) {
         this.emailManager = emailManager;
         activeStages = new ArrayList<Stage>();
-
     }
 
     /**
@@ -97,6 +96,10 @@ public class ViewFactory {
         alert.setHeaderText(null);
         alert.setContentText(contentText);
         alert.showAndWait();
+    }
+
+    public static void writeOnLogLabel(String s) {
+
     }
 
 }

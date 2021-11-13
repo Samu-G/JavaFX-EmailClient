@@ -55,13 +55,14 @@ public class ComposeWindowController extends BaseController {
         subjectTextField.setText(text);
     }
 
-    public void setRecipiantTextArea(String text) {
-        messageTextArea.setText(text);
+    public void setRecipientsTextField(String text) {
+        recipientsTextField.setText(text);
     }
 
     public void setMessageTextArea(String text) {
         messageTextArea.setText(text);
     }
+
 
     private boolean checkRecipientsTextField() {
         System.out.println("checkRecipientsTextField() called.");
@@ -100,6 +101,8 @@ public class ComposeWindowController extends BaseController {
 
             System.out.println(toSend.getRecipientsArray().length);
 
+            Stage stage = (Stage) recipientsTextField.getScene().getWindow();
+            viewFactory.closeStage(stage);
 
             ClientService clientService = new ClientService(emailManager, ClientRequestType.INVIOMESSAGGIO, toSend);
 
@@ -113,11 +116,17 @@ public class ComposeWindowController extends BaseController {
 
                 ClientRequestResult r = sendService.get();
 
+                if (!emailManager.addressesNotFoundedBuffer.isEmpty()) {
+                    ViewFactory.viewAlert("ATTENZIONE", "I destinatari " + emailManager.addressesNotFoundedBuffer + " sono inesistenti");
+                }
+
                 switch (r) {
                     case SUCCESS:
                         ViewFactory.viewAlert("Successo", "Mail inviata con successo");
-                        Stage stage = (Stage) recipientsTextField.getScene().getWindow();
-                        viewFactory.closeStage(stage);
+                        return;
+
+                    case ERROR:
+                        ViewFactory.viewAlert("Errore", "C'è stato qualche errore nell'invio del messaggio");
                         return;
 
                     case FAILED_BY_CREDENTIALS:
@@ -128,6 +137,7 @@ public class ComposeWindowController extends BaseController {
                         ViewFactory.viewAlert("Errore", "Il server è spento");
                         return;
                 }
+
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();

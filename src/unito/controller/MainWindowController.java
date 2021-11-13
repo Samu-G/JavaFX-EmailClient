@@ -1,5 +1,6 @@
 package unito.controller;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +10,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import unito.EmailManager;
+import unito.controller.service.ClientRequestType;
+import unito.controller.service.ClientService;
 import unito.model.Email;
 import unito.view.ViewFactory;
 
@@ -22,27 +25,33 @@ public class MainWindowController extends BaseController implements Initializabl
     private final MenuItem Inoltra = new MenuItem("Inoltra");
     private final MenuItem Cancella = new MenuItem("Cancella");
 
-    @FXML // fx:id="emailsTableView"
-    private TableView<Email> emailsTableView; // Value injected by FXMLLoader
 
-    @FXML // fx:id="dateCol"
-    private TableColumn<Email, String> dateCol; // Value injected by FXMLLoader
+    @FXML
+    private RadioMenuItem refreshRadioButton2;
 
-    @FXML // fx:id="subjectCol"
-    private TableColumn<Email, String> subjectCol; // Value injected by FXMLLoader
+    @FXML
+    private RadioMenuItem refreshRadioButton5;
 
-    @FXML // fx:id="senderCol"
-    private TableColumn<Email, String> senderCol; // Value injected by FXMLLoader
+    @FXML
+    private TableView<Email> emailsTableView;
 
-    @FXML // fx:id="recipientCol"
-    private TableColumn<Email, String> recipientCol; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Email, String> dateCol;
 
-    @FXML // fx:id="sizeCol"
-    private TableColumn<Email, String> sizeCol; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Email, String> subjectCol;
 
-    @FXML // fx:id="logLabel"
-    private Label logLabel; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<Email, String> senderCol;
 
+    @FXML
+    private TableColumn<Email, String> recipientCol;
+
+    @FXML
+    private TableColumn<Email, String> sizeCol;
+
+    @FXML
+    private Label logLabel;
 
     /**
      * @param emailManager the client manager
@@ -53,40 +62,29 @@ public class MainWindowController extends BaseController implements Initializabl
         super(emailManager, viewFactory, fxmlName);
     }
 
-    @FXML
-    void newMessageAction() {
-        viewFactory.showComposeWindow();
-    }
-
-    @FXML
-    //TODO(MB): Vogliamo solo chiudere l'app oppure implementare la possibilità di cambiare account?
-    void quitAction() {
-        Stage stage = (Stage) emailsTableView.getScene().getWindow();
-        viewFactory.closeStage(stage);
-        System.exit(0);
-    }
+    /* Setup */
 
     private void setUpContextMenus() {
 
         //TODO: da implementare
         Rispondi.setOnAction(e -> {
             System.out.println("Rispondi contextualMenuItem pressed.");
-            replySelectedMessage();
+            reply();
         });
 
         Rispondi_a_tutti.setOnAction(e -> {
             System.out.println("Rispondi_a_tutti contextualMenuItem pressed.");
-            replySelectedMessage();
+            replAll();
         });
 
         Inoltra.setOnAction(e -> {
             System.out.println("Inoltra contextualMenuItem pressed.");
-            forwardSelectedMessage();
+            forward();
         });
 
         Cancella.setOnAction(e -> {
             System.out.println("Cancella contextualMenuItem pressed.");
-            deleteSelectedMessage();
+            delete();
         });
 
     }
@@ -96,10 +94,19 @@ public class MainWindowController extends BaseController implements Initializabl
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                    if (mouseEvent.getClickCount() == 2) {
+                    if (mouseEvent.getClickCount() == 1) {
 
-                        System.out.println("Double clicked");
+                        System.out.println("ONE clicked");
 
+                        Email message = emailsTableView.getSelectionModel().getSelectedItem();
+
+                        if (message != null) {
+                            emailManager.setSelectedMessage(message);
+                        } else {
+                            System.out.println("message is null");
+                        }
+
+                    } else if (mouseEvent.getClickCount() == 2) {
                         Email message = emailsTableView.getSelectionModel().getSelectedItem();
 
                         if (message != null) {
@@ -136,35 +143,92 @@ public class MainWindowController extends BaseController implements Initializabl
         emailsTableView.setItems(emailManager.getEmailList());
     }
 
-    public void replySelectedMessage() {
+    private void setUpMenuAction() {
+        ToggleGroup toggleGroup = new ToggleGroup();
+        refreshRadioButton2.setToggleGroup(toggleGroup);
+        refreshRadioButton2.setToggleGroup(toggleGroup);
+    }
+
+    /* Context table menu function */
+
+    public void reply() {
         if (emailManager.getSelectedMessage() != null) {
             String recipients = emailManager.getSelectedMessage().getRecipients();
             if (recipients != null) {
                 viewFactory.showComposeWindow();
-                viewFactory.composeWindowController.setRecipiantTextArea(recipients);
+                viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
+                viewFactory.composeWindowController.setRecipientsTextField(emailManager.getSelectedMessage().getSender());
             }
         }
     }
 
-    public void forwardSelectedMessage() {
+
+    private void replAll() {
+        if (emailManager.getSelectedMessage() != null) {
+        viewFactory.showComposeWindow();
+        if(viewFactory.composeWindowController != null) {
+            viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
+            viewFactory.composeWindowController.setRecipientsTextField(String.join(",", emailManager.getSelectedMessage().getRecipientsArray() ));
+        }
+        }
+    }
+
+    public void forward() {
         if (emailManager.getSelectedMessage() != null) {
             viewFactory.showComposeWindow();
 
             if (viewFactory.composeWindowController != null) {
                 viewFactory.composeWindowController.setSubjectTextField(emailManager.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setRecipiantTextArea(emailManager.getSelectedMessage().getTextMessage());
+                viewFactory.composeWindowController.setMessageTextArea(emailManager.getSelectedMessage().getTextMessage());
             }
         }
     }
 
-    public void deleteSelectedMessage() {
-        //System.out.println("chiamata alla delete");
-        if(emailManager.getSelectedMessage() != null) {
+    public void delete() {
+        if (emailManager.getSelectedMessage() != null) {
+            emailManager.deleteSelectedMessage();
             emailManager.emailList.remove(emailManager.getSelectedMessage());
-            //TODO:refresh
-            //emailsTableView.refresh();
-            // chiamata per il refresh
-            emailManager.refreshEmailList();
+        }
+    }
+
+    /* Menu button action */
+
+    @FXML
+    void newMessageAction() {
+        viewFactory.showComposeWindow();
+    }
+
+    @FXML
+        //TODO(MB): Vogliamo solo chiudere l'app oppure implementare la possibilità di cambiare account?
+    void quitAction() {
+        Stage stage = (Stage) emailsTableView.getScene().getWindow();
+        viewFactory.closeStage(stage);
+        System.exit(0);
+    }
+
+    @FXML
+    void manualUpdateMessageAction() {
+        emailManager.manualRefresh();
+    }
+
+    @FXML
+    void automaticRefreshAction(ActionEvent event) {
+        if (((CheckMenuItem) event.getSource()).isSelected()) {
+            refreshRadioButton2.setSelected(false);
+            refreshRadioButton5.setSelected(true);
+            emailManager.turnOnAutoRefresh(5000);
+        } else {
+            emailManager.turnOffAutoRefresh();
+        }
+    }
+
+    @FXML
+    void setRefreshSpeed(ActionEvent event) {
+        RadioMenuItem itemPressed = (RadioMenuItem) event.getSource();
+        System.out.println(itemPressed);
+        switch (itemPressed.getId()) {
+            case "refreshRadioButton2" -> emailManager.setRefreshSpeed(2000);
+            case "refreshRadioButton5" -> emailManager.setRefreshSpeed(5000);
         }
     }
 
@@ -173,6 +237,7 @@ public class MainWindowController extends BaseController implements Initializabl
         setUpEmailsList();
         setUpMessageSelection();
         setUpContextMenus();
+        setUpMenuAction();
     }
 
 }

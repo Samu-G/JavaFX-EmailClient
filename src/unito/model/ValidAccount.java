@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 public class ValidAccount implements Serializable {
 
-    private String address;
+    private final String address;
     private String password;
+
+    /*Constructor*/
 
     public ValidAccount(String address, String password) {
         this.address = address;
         this.password = password;
     }
+
+    /*Getter*/
 
     public String getAddress() {
         return address;
@@ -20,9 +24,13 @@ public class ValidAccount implements Serializable {
         return password;
     }
 
+    /*Used to encode and decode password*/
+
     public void setPassword(String password) {
         this.password = password;
     }
+
+    /*Aux*/
 
     @Override
     public boolean equals(Object obj) {
