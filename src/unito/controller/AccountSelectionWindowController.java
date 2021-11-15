@@ -59,6 +59,7 @@ public class AccountSelectionWindowController extends BaseController implements 
                     Stage thisStage = (Stage) errorLabel.getScene().getWindow();
                     viewFactory.closeStage(thisStage);
                     viewFactory.showMainWindow();
+                    viewFactory.mainWindowController.setLabel("Connessione stabilita con il server: autenticato come " + emailManager.getCurrentAccount().getAddress());
                     return;
 
                 case FAILED_BY_CREDENTIALS:

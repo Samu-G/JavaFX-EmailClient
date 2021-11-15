@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -31,14 +32,34 @@ public class MessageWindowController extends BaseController implements Initializ
         super(emailManager, viewFactory, s);
     }
 
+    @FXML
+    void rispondiButtonAction(ActionEvent event) {
+        emailManager.reply();
+    }
+
+    @FXML
+    void rispondiATuttiButtonAction(ActionEvent event) {
+        emailManager.replyAll();
+    }
+
+    @FXML
+    void inoltraButtonAction(ActionEvent event) {
+        emailManager.forward();
+    }
+
+    @FXML
+    void cancellaButtonAction(ActionEvent event) {
+        emailManager.delete();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (emailManager.getSelectedMessage() != null) {
             /* Non togliere da qui questo codice!! Funziona solo nell'initializer! */
-            subjectTextField.setText(emailManager.getSelectedMessage().getSubject());
-            recipientsTextField.setText(Arrays.toString(emailManager.getSelectedMessage().getRecipientsArray()));
-            senderTextField.setText(emailManager.getSelectedMessage().getSender());
-            messageTextArea.setText(emailManager.getSelectedMessage().getTextMessage());
+            subjectTextField.textProperty().bind(emailManager.getSelectedMessage().getSubjectProperty());
+            recipientsTextField.textProperty().bind(emailManager.getSelectedMessage().getrecipientsProperty());
+            senderTextField.textProperty().bind(emailManager.getSelectedMessage().getSenderProperty());
+            messageTextArea.textProperty().bind(emailManager.getSelectedMessage().getTextMessageProperty());
         }
 
     }

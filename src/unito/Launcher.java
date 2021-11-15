@@ -20,6 +20,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        emailManager.setViewFactory(viewFactory);
         if (emailManager.emailAccounts.size() > 0) {
             viewFactory.showAccountSelectionWindow();
         }

@@ -1,6 +1,7 @@
 package unito;
 
 import com.sun.tools.javac.Main;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,12 +30,15 @@ import java.util.concurrent.FutureTask;
  */
 public class EmailManager {
 
+    /* Model */
     public ObservableList<EmailAccount> emailAccounts;
-    public List<String> addressesNotFoundedBuffer;
-    private SimpleObjectProperty<EmailAccount> currentAccount;
+    private final SimpleObjectProperty<EmailAccount> currentAccount;
     public ObservableList<Email> emailList;
     private Email selectedMessage;
-    private String logString;
+    public List<String> addressesNotFoundedBuffer;
+    /* View */
+    private ViewFactory viewFactory;
+    /* Thread */
     public Thread refreshThread;
     private RefreshService refreshService;
 
@@ -56,7 +60,9 @@ public class EmailManager {
     }
 
     public void turnOffAutoRefresh() {
-        refreshThread.interrupt();
+        if (refreshThread != null) {
+            refreshThread.interrupt();
+        }
     }
 
     public void setCurrentAccount(EmailAccount emailAccount) {
@@ -70,10 +76,7 @@ public class EmailManager {
 
     public void setSelectedMessage(Email message) {
         this.selectedMessage = message;
-    }
 
-    public void setLogString(String string) {
-        logString = string;
     }
 
     public ObservableList<Email> getEmailList() {
@@ -134,28 +137,79 @@ public class EmailManager {
     }
 
     public void deleteSelectedMessage() {
-        ClientService clientService = new ClientService(this, ClientRequestType.CANCELLAMESSAGGIO, selectedMessage);
+        ClientService clientService = new ClientService(this, ClientRequestType.CANCELLAMESSAGGIO, getSelectedMessage());
         FutureTask<ClientRequestResult> deleteService = new FutureTask<>(clientService);
         Thread thread = new Thread(deleteService);
         thread.start();
-        try {
-            System.out.println("prima");
 
-            ClientRequestResult r = deleteService.get();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    System.out.println("prima");
 
-            System.out.println("dopo");
+                    ClientRequestResult r = deleteService.get();
 
-            switch (r) {
-                case SUCCESS:
-                    ViewFactory.viewAlert("Cancellazione messaggio", "Cancellazione messaggio avvenuta con successo");
-                    break;
+                    System.out.println("dopo");
 
-                case ERROR, FAILED_BY_CREDENTIALS, FAILED_BY_SERVER_DOWN:
-                    ViewFactory.viewAlert("Cancellazione messaggio", "Errore nella comunicazione con il server");
-                    break;
+                    switch (r) {
+                        case SUCCESS:
+                            ViewFactory.viewAlert("Cancellazione messaggio", "Cancellazione messaggio avvenuta con successo");
+                            break;
+
+                        case ERROR, FAILED_BY_CREDENTIALS, FAILED_BY_SERVER_DOWN:
+                            ViewFactory.viewAlert("Cancellazione messaggio", "Errore nella comunicazione con il server");
+                            break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        });
+
+    }
+
+    public void setViewFactory(ViewFactory viewFactory) {
+        this.viewFactory = viewFactory;
+    }
+
+    public void reply() {
+        if (this.getSelectedMessage() != null) {
+            String recipients = this.getSelectedMessage().getRecipients();
+            if (recipients != null) {
+                viewFactory.showComposeWindow();
+                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
+                viewFactory.composeWindowController.setRecipientsTextField(this.getSelectedMessage().getSender());
+            }
         }
     }
+
+    public void replyAll() {
+        if (this.getSelectedMessage() != null) {
+            viewFactory.showComposeWindow();
+            if (viewFactory.composeWindowController != null) {
+                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
+                viewFactory.composeWindowController.setRecipientsTextField(String.join(",", this.getSelectedMessage().getRecipientsArray()));
+            }
+        }
+    }
+
+    public void forward() {
+        if (this.getSelectedMessage() != null) {
+            viewFactory.showComposeWindow();
+
+            if (viewFactory.composeWindowController != null) {
+                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
+                viewFactory.composeWindowController.setMessageTextArea(this.getSelectedMessage().getTextMessage());
+            }
+        }
+    }
+
+    public void delete() {
+        if (this.getSelectedMessage() != null) {
+            this.deleteSelectedMessage();
+            this.emailList.remove(this.getSelectedMessage());
+        }
+    }
+
 }

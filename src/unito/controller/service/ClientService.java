@@ -20,19 +20,17 @@ import java.util.concurrent.Callable;
 
 public class ClientService implements Callable<ClientRequestResult> {
 
-    private EmailManager emailManager;
-    private ValidAccount myCredentials;
-    private EmailAccount currentAccount;
+    private final EmailManager emailManager;
+    private final ValidAccount myCredentials;
     private Socket socket;
-    private ClientRequestType clientRequestType;
-    private Email emailToSend;
+    private final ClientRequestType clientRequestType;
+    private final Email emailToSend;
     private ObjectOutputStream outStream;
     private ObjectInputStream inStream;
 
     public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
         this.emailManager = emailManager;
-        this.currentAccount = emailManager.getCurrentAccount();
-        this.myCredentials = new ValidAccount(currentAccount.getAddress(), currentAccount.getPassword());
+        this.myCredentials = new ValidAccount(emailManager.getCurrentAccount().getAddress(), emailManager.getCurrentAccount().getPassword());
         this.clientRequestType = clientRequestType;
         this.emailToSend = toSend;
     }
@@ -54,35 +52,24 @@ public class ClientService implements Callable<ClientRequestResult> {
                 outStream.writeObject(myCredentials);
 
                 ClientRequestResult authenticationResult = (ClientRequestResult) inStream.readObject();
+
                 boolean operationResult = false;
 
-                System.out.println("risultato ottenuto");
-
-                if (authenticationResult != null) {
+               if (authenticationResult != null) {
                     if (authenticationResult == ClientRequestResult.SUCCESS) {
-                        switch (clientRequestType) {
-                            case HANDSHAKING:
-                                operationResult = handshaking();
-                                break;
-                            case INVIOMESSAGGIO:
-                                operationResult = invioMessaggio(emailToSend);
-                                break;
-                            case RICEVIMESSAGGIO:
-                                operationResult = riceviMessaggi();
-                                break;
-                            case CANCELLAMESSAGGIO:
-                                operationResult = cancellaMessaggio(emailToSend);
-                        }
-
+                        operationResult = switch (clientRequestType) {
+                            case HANDSHAKING -> handshaking();
+                            case INVIOMESSAGGIO -> invioMessaggio(emailToSend);
+                            case RICEVIMESSAGGIO -> riceviMessaggi();
+                            case CANCELLAMESSAGGIO -> cancellaMessaggio(emailToSend);
+                        };
                         if (operationResult) {
                             return ClientRequestResult.SUCCESS;
                         } else {
                             return ClientRequestResult.ERROR;
                         }
-
                     } else if (authenticationResult == ClientRequestResult.FAILED_BY_CREDENTIALS) {
                         return ClientRequestResult.FAILED_BY_CREDENTIALS;
-
                     } else {
                         return ClientRequestResult.ERROR;
                     }
