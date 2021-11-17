@@ -176,16 +176,6 @@ public class EmailManager {
         this.viewFactory = viewFactory;
     }
 
-    public void reply() {
-        if (this.getSelectedMessage() != null) {
-            String recipients = this.getSelectedMessage().getRecipients();
-            if (recipients != null) {
-                viewFactory.showComposeWindow();
-                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setRecipientsTextField(this.getSelectedMessage().getSender());
-            }
-        }
-    }
 
     public void reply(Email emailSelected) {
         if (emailSelected != null) {
@@ -198,15 +188,6 @@ public class EmailManager {
         }
     }
 
-    public void replyAll() {
-        if (this.getSelectedMessage() != null) {
-            viewFactory.showComposeWindow();
-            if (viewFactory.composeWindowController != null) {
-                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setRecipientsTextField(String.join(",", this.getSelectedMessage().getRecipientsArray()));
-            }
-        }
-    }
 
     public void replyAll(Email emailSelected) {
         if (emailSelected != null) {
@@ -217,15 +198,7 @@ public class EmailManager {
             }
         }
     }
-    public void forward() {
-        if (this.getSelectedMessage() != null) {
-            viewFactory.showComposeWindow();
-            if (viewFactory.composeWindowController != null) {
-                viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
-                viewFactory.composeWindowController.setMessageTextArea(this.getSelectedMessage().getTextMessage());
-            }
-        }
-    }
+
 
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
@@ -238,10 +211,10 @@ public class EmailManager {
 
     }
 
-    public void delete() {
-        if (this.getSelectedMessage() != null) {
+    public void delete(Email emailSelected) {
+        if (emailSelected != null) {
             this.deleteSelectedMessage();
-            this.emailList.remove(this.getSelectedMessage());
+            this.emailList.remove(emailSelected);
         }
     }
 

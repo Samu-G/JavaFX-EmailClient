@@ -149,19 +149,19 @@ public class MainWindowController extends BaseController implements Initializabl
     /* Context table menu function */
 
     public void reply() {
-        emailManager.reply();
+        emailManager.reply(emailManager.getSelectedMessage());
     }
 
     private void replyAll() {
-        emailManager.replyAll();
+        emailManager.replyAll(emailManager.getSelectedMessage());
     }
 
     public void forward() {
-        emailManager.forward();
+        emailManager.forward(emailManager.getSelectedMessage());
     }
 
     public void delete() {
-        emailManager.delete();
+        emailManager.delete(emailManager.getSelectedMessage());
     }
 
     /* Menu button action */

@@ -52,7 +52,7 @@ public class MessageWindowController extends BaseController implements Initializ
 
     @FXML
     void cancellaButtonAction(ActionEvent event) {
-        emailManager.delete();
+        emailManager.delete(emailToView);
     }
 
     @Override
