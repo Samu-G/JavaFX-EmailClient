@@ -8,9 +8,9 @@ import java.util.concurrent.FutureTask;
 
 public class RefreshService implements Runnable {
 
-    public long refreshRateInMs = 2000;
+    public long refreshRateInMs;
     private final EmailManager emailManager;
-    private static boolean loop = true;
+    private boolean loop;
 
     public RefreshService(EmailManager emailManager, long refreshRate, boolean loop) {
         super();
@@ -21,7 +21,7 @@ public class RefreshService implements Runnable {
 
     @Override
     public void run() {
-        for (; ; ) {
+        do {
             try {
                 Thread.sleep(refreshRateInMs);
 
@@ -31,12 +31,12 @@ public class RefreshService implements Runnable {
 
                 Thread thread = new Thread(refreshService);
 
+                System.out.println("Loop: " + loop);
+
                 thread.start();
 
                 try {
                     ClientRequestResult r = refreshService.get();
-
-                    System.out.println("Prova");
                     switch (r) {
                         case SUCCESS -> System.out.println("Refresh Done!");
 
@@ -49,14 +49,17 @@ public class RefreshService implements Runnable {
                     e.printStackTrace();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            if(!loop) break;
-        }
+            }
+            System.out.println("sono qui");
+        } while (loop);
     }
 
     public void setRefreshRate(long rate) {
         this.refreshRateInMs = rate;
+    }
+
+    public void setLoop(boolean b) {
+        this.loop = b;
     }
 }

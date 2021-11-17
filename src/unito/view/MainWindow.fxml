@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,12 +15,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <CheckMenuItem mnemonicParsing="false" onAction="#automaticRefreshAction" text="Attiva aggiornamento automatico" />
-                  <CheckMenuItem mnemonicParsing="false" onAction="#disableAutomaticRefreshAction" text="Disattiva aggiornamento automatico" />
+                  <MenuItem mnemonicParsing="false" onAction="#automaticRefreshAction" text="Attiva aggiornamento automatico" />
+                  <MenuItem mnemonicParsing="false" onAction="#disableAutomaticRefreshAction" text="Disattiva aggiornamento automatico" />
                   <Menu mnemonicParsing="false" text="Frequenza di aggiornamento">
                     <items>
-                        <RadioMenuItem fx:id="refreshRadioButton2" mnemonicParsing="false" onAction="#setRefreshSpeed" text="2 secondi" />
-                        <RadioMenuItem fx:id="refreshRadioButton5" mnemonicParsing="false" onAction="#setRefreshSpeed" text="5 secondi" />
+                        <MenuItem fx:id="refreshRadioButtonForce" mnemonicParsing="false" onAction="#setRefreshSpeed" text="50 millisec." />
+                        <MenuItem fx:id="refreshRadioButton2" mnemonicParsing="false" onAction="#setRefreshSpeed" text="2 secondi" />
+                        <MenuItem fx:id="refreshRadioButton5" mnemonicParsing="false" onAction="#setRefreshSpeed" text="5 secondi" />
                     </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#manualUpdateMessageAction" text="Aggiorna messaggi" />
@@ -41,7 +40,7 @@
             <TableColumn fx:id="dateCol" prefWidth="166.0" text="Data e ora" />
         </columns>
       </TableView>
-      <Label fx:id="logLabel" layoutX="14.0" layoutY="569.0" prefHeight="15.0" prefWidth="33.0" text="Label">
+      <Label fx:id="logLabel" layoutX="14.0" layoutY="569.0" prefHeight="17.0" prefWidth="778.0" text="Label">
          <font>
             <Font name="MS Outlook" size="14.0" />
          </font></Label>

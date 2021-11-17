@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.controller.*;
+import unito.model.Email;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,9 +56,9 @@ public class ViewFactory {
         initializeView(composeWindowController, "Componi un messaggio");
     }
 
-    public void showMessageWindow(String windowTitle) {
+    public void showMessageWindow(String windowTitle, Email emailToView) {
         System.out.println("showMessageWindow() called.");
-        messageWindowController = new MessageWindowController(emailManager, this, "MessageWindow.fxml");
+        messageWindowController = new MessageWindowController(emailManager, this, "MessageWindow.fxml", emailToView);
         initializeView(messageWindowController, windowTitle);
     }
 

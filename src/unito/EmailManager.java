@@ -54,14 +54,17 @@ public class EmailManager {
     public void turnOnAutoRefresh(long refreshRate) {
         if (refreshThread == null) {
             refreshService = new RefreshService(this, refreshRate, true);
-            refreshThread = new Thread(refreshService);
+        } else {
+            refreshService.setLoop(true);
         }
+        refreshThread = new Thread(refreshService);
         refreshThread.start();
     }
 
     public void turnOffAutoRefresh() {
         if (refreshThread != null) {
-            refreshThread.interrupt();
+            refreshService.setLoop(false);
+            System.out.println("turnoff");
         }
     }
 
@@ -184,6 +187,17 @@ public class EmailManager {
         }
     }
 
+    public void reply(Email emailSelected) {
+        if (emailSelected != null) {
+            String recipients = emailSelected.getRecipients();
+            if (recipients != null) {
+                viewFactory.showComposeWindow();
+                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
+                viewFactory.composeWindowController.setRecipientsTextField(emailSelected.getSender());
+            }
+        }
+    }
+
     public void replyAll() {
         if (this.getSelectedMessage() != null) {
             viewFactory.showComposeWindow();
@@ -194,15 +208,34 @@ public class EmailManager {
         }
     }
 
+    public void replyAll(Email emailSelected) {
+        if (emailSelected != null) {
+            viewFactory.showComposeWindow();
+            if (viewFactory.composeWindowController != null) {
+                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
+                viewFactory.composeWindowController.setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
+            }
+        }
+    }
     public void forward() {
         if (this.getSelectedMessage() != null) {
             viewFactory.showComposeWindow();
-
             if (viewFactory.composeWindowController != null) {
                 viewFactory.composeWindowController.setSubjectTextField(this.getSelectedMessage().getSubject());
                 viewFactory.composeWindowController.setMessageTextArea(this.getSelectedMessage().getTextMessage());
             }
         }
+    }
+
+    public void forward(Email emailSelected) {
+        if (emailSelected != null) {
+            viewFactory.showComposeWindow();
+            if (viewFactory.composeWindowController != null) {
+                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
+                viewFactory.composeWindowController.setMessageTextArea(emailSelected.getTextMessage());
+            }
+        }
+
     }
 
     public void delete() {

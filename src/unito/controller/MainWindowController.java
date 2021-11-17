@@ -18,11 +18,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainWindowController extends BaseController implements Initializable {
-    @FXML
-    private RadioMenuItem refreshRadioButton2;
-
-    @FXML
-    private RadioMenuItem refreshRadioButton5;
 
     @FXML
     private TableView<Email> emailsTableView;
@@ -44,6 +39,13 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     private Label logLabel;
+
+    @FXML
+    private MenuItem refreshRadioButton2;
+
+    @FXML
+    private MenuItem refreshRadioButton5;
+
 
     private final MenuItem Rispondi;
     private final MenuItem Rispondi_a_tutti;
@@ -113,7 +115,7 @@ public class MainWindowController extends BaseController implements Initializabl
                         if (message != null) {
                             emailManager.setSelectedMessage(message);
                             String windowTitle = message.getSubject();
-                            viewFactory.showMessageWindow(windowTitle);
+                            viewFactory.showMessageWindow(windowTitle, message);
                             emailsTableView.getSelectionModel().clearSelection();
                         } else {
                             System.out.println("message is null");
@@ -142,12 +144,6 @@ public class MainWindowController extends BaseController implements Initializabl
 
         //set del contenuto della tabella
         emailsTableView.setItems(emailManager.getEmailList());
-    }
-
-    private void setUpMenuAction() {
-        ToggleGroup toggleGroup = new ToggleGroup();
-        refreshRadioButton2.setToggleGroup(toggleGroup);
-        refreshRadioButton2.setToggleGroup(toggleGroup);
     }
 
     /* Context table menu function */
@@ -190,27 +186,20 @@ public class MainWindowController extends BaseController implements Initializabl
 
     @FXML
     void automaticRefreshAction(ActionEvent event) {
-        if (((CheckMenuItem) event.getSource()).isSelected()) {
-            refreshRadioButton2.setSelected(false);
-            refreshRadioButton5.setSelected(true);
             emailManager.turnOnAutoRefresh(5000);
-        } else {
-            emailManager.turnOffAutoRefresh();
-        }
     }
 
     @FXML
     void disableAutomaticRefreshAction(ActionEvent event) {
-        refreshRadioButton2.setSelected(false);
-        refreshRadioButton5.setSelected(false);
         emailManager.turnOffAutoRefresh();
     }
 
     @FXML
     void setRefreshSpeed(ActionEvent event) {
-        RadioMenuItem itemPressed = (RadioMenuItem) event.getSource();
+        MenuItem itemPressed = (MenuItem) event.getSource();
         System.out.println(itemPressed);
         switch (itemPressed.getId()) {
+            case "refreshRadioButtonForce" -> emailManager.setRefreshSpeed(50);
             case "refreshRadioButton2" -> emailManager.setRefreshSpeed(2000);
             case "refreshRadioButton5" -> emailManager.setRefreshSpeed(5000);
         }
@@ -225,7 +214,6 @@ public class MainWindowController extends BaseController implements Initializabl
         setUpEmailsList();
         setUpMessageSelection();
         setUpContextMenus();
-        setUpMenuAction();
     }
 
 }

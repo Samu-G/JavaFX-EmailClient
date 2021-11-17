@@ -1,7 +1,6 @@
 package unito.controller;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -10,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import unito.EmailManager;
+import unito.model.Email;
 import unito.view.ViewFactory;
 
 public class MessageWindowController extends BaseController implements Initializable {
@@ -27,24 +27,27 @@ public class MessageWindowController extends BaseController implements Initializ
     @FXML
     private TextField subjectTextField;
 
+    private final Email emailToView;
 
-    public MessageWindowController(EmailManager emailManager, ViewFactory viewFactory, String s) {
-        super(emailManager, viewFactory, s);
+
+    public MessageWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName, Email emailToView) {
+        super(emailManager, viewFactory, fxmlName);
+        this.emailToView = emailToView;
     }
 
     @FXML
     void rispondiButtonAction(ActionEvent event) {
-        emailManager.reply();
+        emailManager.reply(emailToView);
     }
 
     @FXML
     void rispondiATuttiButtonAction(ActionEvent event) {
-        emailManager.replyAll();
+        emailManager.replyAll(emailToView);
     }
 
     @FXML
     void inoltraButtonAction(ActionEvent event) {
-        emailManager.forward();
+        emailManager.forward(emailToView);
     }
 
     @FXML
