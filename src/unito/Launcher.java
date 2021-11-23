@@ -8,7 +8,7 @@ import unito.view.ViewFactory;
 
 public class Launcher extends Application {
 
-    //init model
+    //init modell
     private final EmailManager emailManager = new EmailManager(PersistenceAccess.loadFromPersistenceValidAccount());
 
     //init view
