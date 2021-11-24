@@ -17,7 +17,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-
+/**
+ * Classe Callable<ClientRequestResult> volta a fare una richiesta al Server (che può essere di vario tipo)
+ */
 public class ClientService implements Callable<ClientRequestResult> {
 
     private final EmailManager emailManager;

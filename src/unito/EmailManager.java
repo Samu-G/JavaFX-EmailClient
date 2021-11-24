@@ -24,9 +24,7 @@ import java.util.List;
 import java.util.concurrent.FutureTask;
 
 /**
- * Questa classe contiene:
- * - le due observableList di emailAccount e di Email
- * - funzioni per trasformare validAccount e validEmail in Account ed Email (serializzabili -> non serializzabili)
+ * Classe che gestisce le funzioni principali dell'applicazione
  */
 public class EmailManager {
 

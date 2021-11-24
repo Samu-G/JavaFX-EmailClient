@@ -42,11 +42,6 @@ public class ComposeWindowController extends BaseController {
 
     private boolean dirtyTextArea = true;
 
-    /**
-     * @param emailManager
-     * @param viewFactory  abstract view controller
-     * @param fxmlName     fxml file path of this controller
-     */
     public ComposeWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
         super(emailManager, viewFactory, fxmlName);
     }

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Classe Email (model)
+ */
 public class ValidEmail implements Serializable {
 
     private static long identifier;

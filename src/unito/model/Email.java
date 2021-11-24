@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Classe Email volta alla visualizzazione su view della classe serializzabile ValidEmail
+ */
 public class Email {
 
     private static long identifier;

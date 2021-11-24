@@ -2,6 +2,9 @@ package unito.controller.persistence;
 
 import java.util.Base64;
 
+/**
+ * Classe generica usata come cifrario per codificare e decodificare
+ */
 public class Encoder {
 
     private static Base64.Encoder enc = Base64.getEncoder();

@@ -52,11 +52,7 @@ public class MainWindowController extends BaseController implements Initializabl
     private final MenuItem Inoltra;
     private final MenuItem Cancella;
 
-    /**
-     * @param emailManager the client manager
-     * @param viewFactory  abstract view controller
-     * @param fxmlName     fxml file path of this controller
-     */
+
     public MainWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
         super(emailManager, viewFactory, fxmlName);
         this.Rispondi = new MenuItem("Rispondi");

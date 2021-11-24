@@ -2,6 +2,9 @@ package unito.model;
 
 import java.io.Serializable;
 
+/**
+ * Classe Account (model)
+ */
 public class ValidAccount implements Serializable {
 
     private final String address;

@@ -2,7 +2,9 @@ package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-
+/**
+ * Classe EmailAccount volta alla visualizzazione su view della classe serializzabile ValidAccount
+ */
 public class EmailAccount {
 
     private final SimpleStringProperty address;

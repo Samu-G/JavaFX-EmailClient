@@ -29,7 +29,6 @@ public class MessageWindowController extends BaseController implements Initializ
 
     private final Email emailToView;
 
-
     public MessageWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName, Email emailToView) {
         super(emailManager, viewFactory, fxmlName);
         this.emailToView = emailToView;

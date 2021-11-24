@@ -6,6 +6,9 @@ import unito.view.ViewFactory;
 
 import java.util.concurrent.FutureTask;
 
+/**
+ * Classe Runnable evolta a fare il refresh delle Email in modo automatico
+ */
 public class RefreshService implements Runnable {
 
     public long refreshRateInMs;

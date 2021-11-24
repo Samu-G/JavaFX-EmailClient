@@ -4,9 +4,7 @@ import unito.EmailManager;
 import unito.view.ViewFactory;
 
 /**
- * Abstract class. That would be the Base of all our controller.
- * This class provide generic functionality for all controller.
- * Here we exploit Java Reflection.
+ * Questa è una classe astratta che esplicita la base dei controller.
  */
 public abstract class BaseController {
 
