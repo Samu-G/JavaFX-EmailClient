@@ -58,14 +58,12 @@ public class MainWindowController extends BaseController implements Initializabl
         this.Rispondi = new MenuItem("Rispondi");
         this.Rispondi_a_tutti = new MenuItem("Rispondi a tutti");
         this.Inoltra = new MenuItem("Inoltra");
-        Cancella = new MenuItem("Cancella");
+        this.Cancella = new MenuItem("Cancella");
     }
 
     /* Setup */
 
     private void setUpContextMenus() {
-
-        //TODO: da implementare
         Rispondi.setOnAction(e -> {
             System.out.println("Rispondi contextualMenuItem pressed.");
             reply();
@@ -168,7 +166,6 @@ public class MainWindowController extends BaseController implements Initializabl
     }
 
     @FXML
-        //TODO(MB): Vogliamo solo chiudere l'app oppure implementare la possibilità di cambiare account?
     void quitAction() {
         Stage stage = (Stage) emailsTableView.getScene().getWindow();
         viewFactory.closeStage(stage);
