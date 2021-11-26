@@ -2,23 +2,15 @@
   <library name="javafx-swt">
     <CLASSES>
       <root url="jar://$PATH_TO_FX$/javafx-swt.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.graphics.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.fxml.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.swing.jar!/" />
-      <root url="jar://$PATH_TO_FX$/javafx.media.jar!/" />
       <root url="jar://$PATH_TO_FX$/javafx.base.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.media.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.web.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.graphics.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.controls.jar!/" />
+      <root url="jar://$PATH_TO_FX$/javafx.fxml.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.base" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.controls" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.fxml" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.graphics" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.media" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.swing" />
-      <root url="jar://$PATH_TO_FX$/src.zip!/javafx.web" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
