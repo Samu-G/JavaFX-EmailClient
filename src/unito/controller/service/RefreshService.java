@@ -1,5 +1,6 @@
 package unito.controller.service;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.view.ViewFactory;
@@ -14,6 +15,7 @@ public class RefreshService implements Runnable {
     public long refreshRateInMs;
     private final EmailManager emailManager;
     private boolean loop;
+    private boolean serverOnline;
 
     public RefreshService(EmailManager emailManager, long refreshRate, boolean loop) {
         super();
@@ -41,12 +43,31 @@ public class RefreshService implements Runnable {
                 try {
                     ClientRequestResult r = refreshService.get();
                     switch (r) {
-                        case SUCCESS -> System.out.println("Refresh Done!");
+                        case SUCCESS -> {
+                            if(!serverOnline) {
+                                ViewFactory.viewAlert("Avviso", "Connessione ristabilita con il server.");
+                            }
+                            serverOnline = true;
+                            System.out.println("Refresh Done!");
+                            emailManager.viewFactory.writeOnLogLabel("Connessione con il server stabilita. Autenticato come " + emailManager.getCurrentAccount().getAddress());
+                        }
 
-                        case FAILED_BY_CREDENTIALS -> ViewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. ");
+                        case FAILED_BY_CREDENTIALS -> {
+                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. Autenticato come" + emailManager.getCurrentAccount().getAddress());
+                        }
 
-                        case FAILED_BY_SERVER_DOWN -> ViewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. ");
+                        case FAILED_BY_SERVER_DOWN -> {
+                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come" + emailManager.getCurrentAccount().getAddress());
+
+                            if (serverOnline) {
+                                ViewFactory.viewAlert("Errore", "Connessione interrotta con il server. Tentativo di riconnessione in corso...");
+                            }
+
+                            serverOnline = false;
+                        }
+
                     }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

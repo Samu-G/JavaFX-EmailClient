@@ -35,7 +35,7 @@ public class EmailManager {
     private Email selectedMessage;
     public List<String> addressesNotFoundedBuffer;
     /* View */
-    private ViewFactory viewFactory;
+    public ViewFactory viewFactory;
     /* Thread */
     public Thread refreshThread;
     private RefreshService refreshService;

@@ -1,5 +1,6 @@
 package unito.view;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,7 +33,7 @@ public class ViewFactory {
     /**
      * Create controller for LoginWindow. Then, initialize the account selection window.
      */
-    public void showAccountSelectionWindow(){
+    public void showAccountSelectionWindow() {
         System.out.println("showAccountSelectionWindow() called.");
         accountSelectionWindowController = new AccountSelectionWindowController(emailManager, this, "AccountSelectionWindow.fxml");
         initializeView(accountSelectionWindowController, "Seleziona l'account per la prima volta");
@@ -41,7 +42,7 @@ public class ViewFactory {
     /**
      * Create controller for MainWindow. Then, initialize the Main window.
      */
-    public void showMainWindow(){
+    public void showMainWindow() {
         System.out.println("showMainWindow() called.");
         mainWindowController = new MainWindowController(emailManager, this, "MainWindow.fxml");
         initializeView(mainWindowController, "Client");
@@ -50,7 +51,7 @@ public class ViewFactory {
     /**
      * Create controller for ComposeWindow. Then, initialize the Composing window.
      */
-    public void showComposeWindow(){
+    public void showComposeWindow() {
         System.out.println("showComposeWindow() called.");
         composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml");
         initializeView(composeWindowController, "Componi un messaggio");
@@ -64,9 +65,10 @@ public class ViewFactory {
 
     /**
      * Load fxml file, set the controller, create and show the Scene/Stage.
+     *
      * @param baseController Controller of the Stage
      */
-    private void initializeView(BaseController baseController, String windowTitle){
+    private void initializeView(BaseController baseController, String windowTitle) {
         System.out.println("initializeView() called.");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(baseController.getFxmlName()));
         fxmlLoader.setController(baseController);
@@ -91,16 +93,27 @@ public class ViewFactory {
     }
 
     public static void viewAlert(String title, String contentText) {
-        System.out.println("viewAllert() called.");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(contentText);
-        alert.showAndWait();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("viewAllert() called.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.setContentText(contentText);
+                alert.showAndWait();
+            }
+        });
     }
 
-    public static void writeOnLogLabel(String s) {
-
+    public void writeOnLogLabel(String s) {
+        ViewFactory vf = this;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vf.mainWindowController.setLabel(s);
+            }
+        });
     }
 
 }
