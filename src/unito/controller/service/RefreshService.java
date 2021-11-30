@@ -8,7 +8,7 @@ import unito.view.ViewFactory;
 import java.util.concurrent.FutureTask;
 
 /**
- * Classe Runnable evolta a fare il refresh delle Email in modo automatico
+ * Classe Runnable volta a fare il refresh delle Email in modo automatico
  */
 public class RefreshService implements Runnable {
 
@@ -44,7 +44,7 @@ public class RefreshService implements Runnable {
                     ClientRequestResult r = refreshService.get();
                     switch (r) {
                         case SUCCESS -> {
-                            if(!serverOnline) {
+                            if(!serverOnline && loop) {
                                 ViewFactory.viewAlert("Avviso", "Connessione ristabilita con il server.");
                             }
                             serverOnline = true;
@@ -53,11 +53,11 @@ public class RefreshService implements Runnable {
                         }
 
                         case FAILED_BY_CREDENTIALS -> {
-                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. Autenticato come" + emailManager.getCurrentAccount().getAddress());
+                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. Autenticato come " + emailManager.getCurrentAccount().getAddress());
                         }
 
                         case FAILED_BY_SERVER_DOWN -> {
-                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come" + emailManager.getCurrentAccount().getAddress());
+                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come " + emailManager.getCurrentAccount().getAddress());
 
                             if (serverOnline) {
                                 ViewFactory.viewAlert("Errore", "Connessione interrotta con il server. Tentativo di riconnessione in corso...");

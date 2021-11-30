@@ -45,13 +45,14 @@ public class ValidAccount implements Serializable {
             System.out.println("classe non corretta");
             return false;
         } else {
-            if (this.address.equals(((ValidAccount) obj).getAddress())
-                    && this.password.equals(((ValidAccount) obj).getPassword())) {
-                return true;
-            } else {
-                return false;
-            }
+            return this.address.equals(((ValidAccount) obj).getAddress())
+                    && this.password.equals(((ValidAccount) obj).getPassword());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "address: " + address + " password: " + password;
     }
 
 }

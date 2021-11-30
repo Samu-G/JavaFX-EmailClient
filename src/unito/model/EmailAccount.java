@@ -36,8 +36,7 @@ public class EmailAccount {
 
     @Override
     public String toString() {
-        System.out.println("Creato un nuovo EmailAccount\nADRESS: " + address.get() + "\nPASSWORD: " + password.get());
-        return address.get();
+        return "address: " + address.get() + " password: " + password.get();
     }
 
 }

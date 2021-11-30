@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class Email {
 
-    private static long identifier;
+    private final long identifier;
 
     private final SimpleStringProperty sender; //mittente
 
@@ -27,7 +27,7 @@ public class Email {
 
     private final SimpleStringProperty textMessage;
 
-    private Date effectiveDate;
+    private final Date effectiveDate;
 
     public String getTextMessage() {
         return textMessage.get();
@@ -36,7 +36,6 @@ public class Email {
     /*Constructor*/
 
     public Email(String sender, String[] recipient, String subject, String textMessage) {
-        setIdentifier();
         this.sender = new SimpleStringProperty(sender);
 
         String s = "";
@@ -51,6 +50,7 @@ public class Email {
         this.effectiveDate = new Date();
         this.date = new SimpleStringProperty(this.effectiveDate.toString());
         this.textMessage = new SimpleStringProperty(textMessage);
+        this.identifier = this.effectiveDate.hashCode();
     }
 
     public Email(ValidEmail validEmail) {
@@ -67,6 +67,7 @@ public class Email {
         this.subject = new SimpleStringProperty(validEmail.getSubject());
         this.size = new SimpleStringProperty(Integer.toString(validEmail.getSize()));
         this.date = new SimpleStringProperty(validEmail.getDate().toString());
+        this.effectiveDate = validEmail.getDate();
         this.textMessage = new SimpleStringProperty(validEmail.getTextMessage());
     }
 
@@ -104,23 +105,19 @@ public class Email {
         return subject.get();
     }
 
-    public String getSize() {
-        return size.get();
+    public int getSize() {
+        return Integer.parseUnsignedInt(size.get());
     }
 
     public Date getDate() {
         return effectiveDate;
     }
 
-    public static long getIdentifier() {
+    public long getIdentifier() {
         return identifier;
     }
 
     /*Aux*/
-
-    private void setIdentifier() {
-        this.identifier = System.currentTimeMillis();
-    }
 
     @Override
     public boolean equals(Object o) {

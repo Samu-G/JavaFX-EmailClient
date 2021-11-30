@@ -9,35 +9,35 @@ import java.util.Objects;
  */
 public class ValidEmail implements Serializable {
 
-    private static long identifier;
+    private final long identifier;
 
     private final String sender;
 
-    private final String [] recipients; //destinatari
+    private final String [] recipients;
 
-    private final String subject; //oggetto
+    private final String subject;
 
     private final int size;
 
-    private final Date date; //data di creazione
+    private final Date date;
 
-    private final String textMessage; //testo del messaggio
+    private final String textMessage;
 
     /*Constructor*/
 
-    public ValidEmail(String sender, String [] recipients, String subject, String size, Date date, String textMessage) {
-        setIdentifier();
-        this.sender = sender;
-        this.recipients = recipients;
-        this.subject = subject;
-        this.size = textMessage.length();
-        this.date = date;
-        this.textMessage = textMessage;
+    public ValidEmail(Email email) {
+        this.identifier = email.getIdentifier();
+        this.sender = email.getSender();
+        this.recipients = email.getRecipientsArray();
+        this.subject = email.getSubject();
+        this.size = email.getSize();
+        this.date = email.getDate();
+        this.textMessage = email.getTextMessage();
     }
 
     /*Getter*/
 
-    public static long getIdentifier() {
+    public long getIdentifier() {
         return identifier;
     }
 
@@ -65,11 +65,6 @@ public class ValidEmail implements Serializable {
         return textMessage;
     }
 
-    /*Private Setter*/
-
-    private void setIdentifier() {
-        this.identifier = System.currentTimeMillis();
-    }
 
     /*Aux*/
 

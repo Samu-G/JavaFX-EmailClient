@@ -117,7 +117,7 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             if (email != null) {
 
-                validEmailToSend = new ValidEmail(email.getSender(), email.getRecipientsArray(), email.getSubject(), email.getSize(), email.getDate(), email.getTextMessage());
+                validEmailToSend = new ValidEmail(email);
 
                 try {
                     outStream.writeObject(validEmailToSend);
@@ -179,7 +179,7 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             if (toDelete != null) {
 
-                validEmailToSend = new ValidEmail(toDelete.getSender(), toDelete.getRecipientsArray(), toDelete.getSubject(), toDelete.getSize(), toDelete.getDate(), toDelete.getTextMessage());
+                validEmailToSend = new ValidEmail(toDelete);
 
                 try {
 
