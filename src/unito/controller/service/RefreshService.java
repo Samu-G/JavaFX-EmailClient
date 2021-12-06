@@ -44,20 +44,20 @@ public class RefreshService implements Runnable {
                     ClientRequestResult r = refreshService.get();
                     switch (r) {
                         case SUCCESS -> {
-                            if(!serverOnline && loop) {
+                            if (!serverOnline && loop) {
                                 ViewFactory.viewAlert("Avviso", "Connessione ristabilita con il server.");
                             }
                             serverOnline = true;
                             System.out.println("Refresh Done!");
-                            emailManager.viewFactory.writeOnLogLabel("Connessione con il server stabilita. Autenticato come " + emailManager.getCurrentAccount().getAddress());
+                            emailManager.getViewFactory().writeOnLogLabel("Connessione con il server stabilita. Autenticato come " + emailManager.getCurrentAccount().getAddress());
                         }
 
                         case FAILED_BY_CREDENTIALS -> {
-                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. Autenticato come " + emailManager.getCurrentAccount().getAddress());
+                            emailManager.getViewFactory().writeOnLogLabel("ERRORE: Refresh automatico fallito a causa di credenziali errate. Autenticato come " + emailManager.getCurrentAccount().getAddress());
                         }
 
                         case FAILED_BY_SERVER_DOWN -> {
-                            emailManager.viewFactory.writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come " + emailManager.getCurrentAccount().getAddress());
+                            emailManager.getViewFactory().writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come " + emailManager.getCurrentAccount().getAddress());
 
                             if (serverOnline) {
                                 ViewFactory.viewAlert("Errore", "Connessione interrotta con il server. Tentativo di riconnessione in corso...");
@@ -73,7 +73,7 @@ public class RefreshService implements Runnable {
                     e.printStackTrace();
                 }
             } catch (InterruptedException e) {
-
+                e.printStackTrace();
             }
             System.out.println("sono qui");
         } while (loop);

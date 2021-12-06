@@ -20,10 +20,27 @@ public class ViewFactory {
 
     private final EmailManager emailManager;
     private final ArrayList<Stage> activeStages;
-    public AccountSelectionWindowController accountSelectionWindowController;
-    public MainWindowController mainWindowController;
-    public ComposeWindowController composeWindowController;
-    public MessageWindowController messageWindowController;
+    private AccountSelectionWindowController accountSelectionWindowController;
+    private MainWindowController mainWindowController;
+    private ComposeWindowController composeWindowController;
+    private MessageWindowController messageWindowController;
+
+    public AccountSelectionWindowController getAccountSelectionWindowController() {
+        return accountSelectionWindowController;
+    }
+
+    public MainWindowController getMainWindowController() {
+        return mainWindowController;
+    }
+
+    public ComposeWindowController getComposeWindowController() {
+        return composeWindowController;
+    }
+
+    public MessageWindowController getMessageWindowController() {
+        return messageWindowController;
+    }
+
 
     public ViewFactory(EmailManager emailManager) {
         this.emailManager = emailManager;

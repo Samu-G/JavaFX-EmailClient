@@ -46,7 +46,6 @@ public class MainWindowController extends BaseController implements Initializabl
     @FXML
     private MenuItem refreshRadioButton5;
 
-
     private final MenuItem Rispondi;
     private final MenuItem Rispondi_a_tutti;
     private final MenuItem Inoltra;

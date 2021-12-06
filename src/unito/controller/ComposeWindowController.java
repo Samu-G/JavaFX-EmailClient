@@ -1,10 +1,6 @@
-package unito.controller; /**
- * Sample Skeleton for 'ComposeWindow.fxml' Controller Class
- */
+package unito.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -14,13 +10,6 @@ import unito.controller.service.ClientRequestType;
 import unito.controller.service.ClientService;
 import unito.model.Email;
 import unito.view.ViewFactory;
-
-import java.beans.PropertyChangeListener;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
@@ -28,16 +17,16 @@ import java.util.regex.Pattern;
 
 public class ComposeWindowController extends BaseController {
 
-    @FXML // fx:id="subjectTextField"
-    private TextField subjectTextField; // Value injected by FXMLLoader
+    @FXML
+    private TextField subjectTextField;
 
-    @FXML // fx:id="recipientsTextField"
-    private TextField recipientsTextField; // Value injected by FXMLLoader
+    @FXML
+    private TextField recipientsTextField;
 
-    @FXML // fx:id="messageTextArea"
-    private TextArea messageTextArea; // Value injected by FXMLLoader
+    @FXML
+    private TextArea messageTextArea;
 
-    /*array di destinatari*/
+    /* Array di destinatari */
     private String[] recipientsBuffer;
 
     private boolean dirtyTextArea = true;
@@ -58,14 +47,13 @@ public class ComposeWindowController extends BaseController {
         messageTextArea.setText(text);
     }
 
-
     private boolean checkRecipientsTextField() {
         System.out.println("checkRecipientsTextField() called.");
         String pattern = "([^@,;\s]+@[^@,;\s]+)|(?:$|\s*[,;])(?:\s*)(.*?)<([^@,;\s]+@[^@,;\s]+)>";
         Pattern p = Pattern.compile(pattern);
 
         String text = this.recipientsTextField.getText();
-        recipientsBuffer = text.split(", "); /*!!*/
+        recipientsBuffer = text.split(", ");
         Matcher matcher;
 
         for (String recipient : recipientsBuffer) {
@@ -97,6 +85,7 @@ public class ComposeWindowController extends BaseController {
             System.out.println(toSend.getRecipientsArray().length);
 
             Stage stage = (Stage) recipientsTextField.getScene().getWindow();
+
             viewFactory.closeStage(stage);
 
             ClientService clientService = new ClientService(emailManager, ClientRequestType.INVIOMESSAGGIO, toSend);
@@ -111,8 +100,8 @@ public class ComposeWindowController extends BaseController {
 
                 ClientRequestResult r = sendService.get();
 
-                if (!emailManager.addressesNotFoundedBuffer.isEmpty()) {
-                    ViewFactory.viewAlert("ATTENZIONE", "I destinatari " + emailManager.addressesNotFoundedBuffer + " sono inesistenti");
+                if (!emailManager.getAddressesNotFoundedBuffer().isEmpty()) {
+                    ViewFactory.viewAlert("ATTENZIONE", "I destinatari " + emailManager.getAddressesNotFoundedBuffer() + " sono inesistenti");
                 }
 
                 switch (r) {

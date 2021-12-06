@@ -14,7 +14,6 @@ import unito.view.ViewFactory;
 
 public class MessageWindowController extends BaseController implements Initializable {
 
-
     @FXML
     private TextArea messageTextArea;
 
@@ -59,7 +58,7 @@ public class MessageWindowController extends BaseController implements Initializ
         if (emailManager.getSelectedMessage() != null) {
             /* Non togliere da qui questo codice!! Funziona solo nell'initializer! */
             subjectTextField.textProperty().bind(emailManager.getSelectedMessage().getSubjectProperty());
-            recipientsTextField.textProperty().bind(emailManager.getSelectedMessage().getrecipientsProperty());
+            recipientsTextField.textProperty().bind(emailManager.getSelectedMessage().getRecipientsProperty());
             senderTextField.textProperty().bind(emailManager.getSelectedMessage().getSenderProperty());
             messageTextArea.textProperty().bind(emailManager.getSelectedMessage().getTextMessageProperty());
         }

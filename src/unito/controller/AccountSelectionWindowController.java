@@ -20,6 +20,7 @@ public class AccountSelectionWindowController extends BaseController implements 
 
     @FXML
     private Label errorLabel;
+
     @FXML
     private ChoiceBox<EmailAccount> accountPicker;
 
@@ -39,18 +40,18 @@ public class AccountSelectionWindowController extends BaseController implements 
             emailManager.setCurrentAccount(accountPicker.getValue());
         } catch (RuntimeException e) {
             errorLabel.setText("Devi prima selezionare un'account dalla lista");
+            return;
         }
 
-        /* Qui viene avviato il task volto a collegarsi e scaricare "l'EmailBean" dal server */
         ClientService clientService = new ClientService(emailManager, ClientRequestType.HANDSHAKING, null);
-        /* Viene avviato un thread apposito per gestire questo lavoro in concorrenza */
+
         FutureTask<ClientRequestResult> loginService = new FutureTask<>(clientService);
 
         Thread thread = new Thread(loginService);
+
         thread.start();
 
         try {
-            //Viene restituito un risultato dal thread (PER QUESTO E'UN FUTURETASK)
             ClientRequestResult r = loginService.get();
 
             switch (r) {
@@ -59,39 +60,28 @@ public class AccountSelectionWindowController extends BaseController implements 
                     Stage thisStage = (Stage) errorLabel.getScene().getWindow();
                     viewFactory.closeStage(thisStage);
                     viewFactory.showMainWindow();
-                    viewFactory.mainWindowController.setLabel("Connessione stabilita con il server: autenticato come " + emailManager.getCurrentAccount().getAddress());
-                    return;
+                    viewFactory.getMainWindowController().setLabel("Connessione stabilita con il server: autenticato come " + emailManager.getCurrentAccount().getAddress());
+                    break;
 
                 case FAILED_BY_CREDENTIALS:
                     errorLabel.setText("Credenziali errate!");
-                    return;
+                    break;
 
                 case FAILED_BY_SERVER_DOWN:
-                    //System.out.println("qui");
                     errorLabel.setText("Il server è spento!");
-                    return;
+                    break;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    /**
-     * Riempie l'oggetto ChoiceBox con gli account salvati
-     */
     private void setUpMenuButton() {
         accountPicker.setItems(emailManager.getEmailAccounts());
         accountPicker.setValue(emailManager.getCurrentAccount());
     }
 
-    /**
-     * Attenzione a questo initlialize
-     *
-     * @param url
-     * @param resourceBundle
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpMenuButton();

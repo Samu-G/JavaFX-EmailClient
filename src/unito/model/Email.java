@@ -87,7 +87,7 @@ public class Email {
         return this.sender;
     }
 
-    public SimpleStringProperty getrecipientsProperty() {
+    public SimpleStringProperty getRecipientsProperty() {
         return this.recipients;
     }
 

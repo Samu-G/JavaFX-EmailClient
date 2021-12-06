@@ -8,10 +8,10 @@ import unito.view.ViewFactory;
 
 public class Launcher extends Application {
 
-    //init modell
+    //init application manager
     private final EmailManager emailManager = new EmailManager(PersistenceAccess.loadFromPersistenceValidAccount());
 
-    //init view
+    //init view manager
     private final ViewFactory viewFactory = new ViewFactory(emailManager);
 
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class Launcher extends Application {
             viewFactory.showAccountSelectionWindow();
         }
         else {
-            ViewFactory.viewAlert("attenzione", "nessun account salvato nel client.");
+            ViewFactory.viewAlert("Attenzione", "Nessun account salvato nel client.");
             stop();
         }
     }
