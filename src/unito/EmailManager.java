@@ -1,13 +1,9 @@
 package unito;
 
-import com.sun.tools.javac.Main;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-import unito.controller.ComposeWindowController;
-import unito.controller.MainWindowController;
 import unito.controller.service.ClientRequestResult;
 import unito.controller.service.ClientRequestType;
 import unito.controller.service.ClientService;
@@ -17,9 +13,6 @@ import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
@@ -33,13 +26,12 @@ public class EmailManager {
     private final SimpleObjectProperty<EmailAccount> currentAccount;
     public ObservableList<Email> emailList;
     private Email selectedMessage;
-    public List<String> addressesNotFoundedBuffer;
+    private List<String> addressesNotFoundedBuffer;
     /* View */
-    public ViewFactory viewFactory;
+    private ViewFactory viewFactory;
     /* Thread */
-    public Thread refreshThread;
+    private Thread refreshThread;
     private RefreshService refreshService;
-
 
     public EmailManager(List<ValidAccount> validAccountList) {
         this.emailAccounts = FXCollections.observableArrayList();
@@ -78,6 +70,18 @@ public class EmailManager {
     public void setSelectedMessage(Email message) {
         this.selectedMessage = message;
 
+    }
+
+    public void setAddressesNotFoundedBuffer(List<String> addressesNotFoundedBuffer) {
+        this.addressesNotFoundedBuffer = addressesNotFoundedBuffer;
+    }
+
+    public List<String> getAddressesNotFoundedBuffer() {
+        return addressesNotFoundedBuffer;
+    }
+
+    public ViewFactory getViewFactory() {
+        return viewFactory;
     }
 
     public ObservableList<Email> getEmailList() {
@@ -147,11 +151,8 @@ public class EmailManager {
             @Override
             public void run() {
                 try {
-                    System.out.println("prima");
 
                     ClientRequestResult r = deleteService.get();
-
-                    System.out.println("dopo");
 
                     switch (r) {
                         case SUCCESS:
@@ -180,8 +181,8 @@ public class EmailManager {
             String recipients = emailSelected.getRecipients();
             if (recipients != null) {
                 viewFactory.showComposeWindow();
-                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
-                viewFactory.composeWindowController.setRecipientsTextField(emailSelected.getSender());
+                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewFactory.getComposeWindowController().setRecipientsTextField(emailSelected.getSender());
             }
         }
     }
@@ -190,9 +191,9 @@ public class EmailManager {
     public void replyAll(Email emailSelected) {
         if (emailSelected != null) {
             viewFactory.showComposeWindow();
-            if (viewFactory.composeWindowController != null) {
-                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
-                viewFactory.composeWindowController.setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
+            if (viewFactory.getComposeWindowController() != null) {
+                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewFactory.getComposeWindowController().setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
             }
         }
     }
@@ -201,9 +202,9 @@ public class EmailManager {
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
             viewFactory.showComposeWindow();
-            if (viewFactory.composeWindowController != null) {
-                viewFactory.composeWindowController.setSubjectTextField(emailSelected.getSubject());
-                viewFactory.composeWindowController.setMessageTextArea(emailSelected.getTextMessage());
+            if (viewFactory.getComposeWindowController() != null) {
+                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewFactory.getComposeWindowController().setMessageTextArea(emailSelected.getTextMessage());
             }
         }
 

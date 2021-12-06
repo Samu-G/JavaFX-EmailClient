@@ -3,7 +3,6 @@ package unito.controller.persistence;
 import javafx.collections.ObservableList;
 import unito.model.EmailAccount;
 import unito.model.ValidAccount;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +22,28 @@ public class PersistenceAccess {
 
         List<ValidAccount> resultList = new ArrayList<>();
 
-
-
-        /* Carico dal File di persistenza gli account del client */
         try {
             FileInputStream fileInputStream = new FileInputStream(VALID_ACCOUNTS_LOCATION);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            resultList = (List<ValidAccount>) objectInputStream.readObject();
 
-            /* Decripto le password di ogni account della lista */
-            //TODO(MB): Decode ed Encode non molto chiari
+            Object o = objectInputStream.readObject();
+
+            if(o instanceof List) {
+                if(!((List<?>) o).isEmpty()) {
+                    if(((List<?>) o).get(0) instanceof ValidAccount) {
+                        resultList = (List<ValidAccount>)o;
+                    }
+                }
+            }
+
             decodePasswords(resultList);
 
         } catch (FileNotFoundException e) {
-            /* * Account salvati nel file di persistenza */
+            /* Account salvati nel file di persistenza */
             System.out.println("File NOT FOUND! Loading demo...");
             resultList.add(new ValidAccount("user1@email.com", "user1"));
             resultList.add(new ValidAccount("user2@email.com", "user2"));
             resultList.add(new ValidAccount("user3@email.com", "user3"));
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,18 +1,14 @@
 package unito.controller.service;
 
-//import org.jetbrains.annotations.NotNull;
 import unito.EmailManager;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
-import unito.model.EmailAccount;
-import unito.view.ViewFactory;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,8 +27,14 @@ public class ClientService implements Callable<ClientRequestResult> {
     private ObjectInputStream inStream;
 
     public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
+        ValidAccount myCredentialsTemp;
         this.emailManager = emailManager;
-        this.myCredentials = new ValidAccount(emailManager.getCurrentAccount().getAddress(), emailManager.getCurrentAccount().getPassword());
+        try {
+            myCredentialsTemp = new ValidAccount(emailManager.getCurrentAccount().getAddress(), emailManager.getCurrentAccount().getPassword());
+        } catch (RuntimeException e) {
+            myCredentialsTemp = new ValidAccount(null, null);
+        }
+        this.myCredentials = myCredentialsTemp;
         this.clientRequestType = clientRequestType;
         this.emailToSend = toSend;
     }
@@ -48,16 +50,15 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             System.out.println("Ho aperto il socket verso il server. \n");
             try {
-
                 openStream();
 
                 outStream.writeObject(myCredentials);
 
                 ClientRequestResult authenticationResult = (ClientRequestResult) inStream.readObject();
 
-                boolean operationResult = false;
+                boolean operationResult;
 
-               if (authenticationResult != null) {
+                if (authenticationResult != null) {
                     if (authenticationResult == ClientRequestResult.SUCCESS) {
                         operationResult = switch (clientRequestType) {
                             case HANDSHAKING -> handshaking();
@@ -78,12 +79,13 @@ public class ClientService implements Callable<ClientRequestResult> {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                closeStream();
             }
         } catch (ConnectException e) {
             return ClientRequestResult.FAILED_BY_SERVER_DOWN;
         }
 
-        closeStream();
         return null;
     }
 
@@ -91,14 +93,24 @@ public class ClientService implements Callable<ClientRequestResult> {
         try {
             outStream.writeObject(clientRequestType);
 
-            List<ValidEmail> myEmail = (List<ValidEmail>) inStream.readObject();
+            List<ValidEmail> myEmail = null;
+
+            Object o = inStream.readObject();
+
+            if (o instanceof List) {
+                if (!((List<?>) o).isEmpty()) {
+                    if (((List<?>) o).get(0) instanceof ValidEmail) {
+                        myEmail = (List<ValidEmail>) o;
+                    }
+                }
+            }
 
             if (myEmail != null) {
                 emailManager.loadEmail(myEmail);
                 System.out.println("Handshaking completed.");
                 return true;
             } else {
-                System.out.println("Handshaking FAILED. List<ValidEmail> is null.");
+                System.out.println("Handshaking FAILED. List<ValidEmail> is null or not valid.");
                 return false;
             }
 
@@ -124,13 +136,23 @@ public class ClientService implements Callable<ClientRequestResult> {
 
                     System.out.println("Ricezione lista di indirizzi non trovati...");
 
-                    List<String> addressesNotFounded = (LinkedList<String>) inStream.readObject();
+                    LinkedList<String> addressesNotFounded = new LinkedList<>();
+
+                    Object o = inStream.readObject();
+
+                    if (o instanceof List) {
+                        if (!((List<?>) o).isEmpty()) {
+                            if (((List<?>) o).get(0) instanceof String) {
+                                addressesNotFounded = (LinkedList<String>) o;
+                            }
+                        }
+                    }
 
                     if (!addressesNotFounded.isEmpty()) {
-                        emailManager.addressesNotFoundedBuffer = addressesNotFounded;
+                        emailManager.setAddressesNotFoundedBuffer(addressesNotFounded);
                         return false;
                     } else {
-                        emailManager.addressesNotFoundedBuffer = new LinkedList<>();
+                        emailManager.setAddressesNotFoundedBuffer(new LinkedList<>());
                         return true;
                     }
 
@@ -152,26 +174,35 @@ public class ClientService implements Callable<ClientRequestResult> {
     }
 
     private boolean riceviMessaggi() {
-
-        List<ValidEmail> validEmailToRecive;
-
         try {
             outStream.writeObject(clientRequestType);
 
-            validEmailToRecive = (List<ValidEmail>) inStream.readObject();
-            emailManager.loadEmail(validEmailToRecive);
-            System.out.println("RiceviMessaggi completed.");
-            return true;
+            List<ValidEmail> validEmailToReceive;
+
+            Object o = inStream.readObject();
+
+            if (o instanceof List) {
+                if (!((List<?>) o).isEmpty()) {
+                    if (((List<?>) o).get(0) instanceof ValidEmail) {
+                        validEmailToReceive = (List<ValidEmail>) o;
+                        emailManager.loadEmail(validEmailToReceive);
+                        System.out.println("RiceviMessaggi completed.");
+                        return true;
+                    }
+                }
+            } else {
+                System.out.println("RiceviMessaggi FAILED.");
+                return false;
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("RiceviMessaggi FAILED.");
-        return false;
 
+        return false;
     }
 
     private boolean cancellaMessaggio(Email toDelete) {
-        boolean opResult = false;
+        boolean opResult;
         try {
             outStream.writeObject(clientRequestType);
 
@@ -184,8 +215,16 @@ public class ClientService implements Callable<ClientRequestResult> {
                 try {
 
                     outStream.writeObject(validEmailToSend);
-                    opResult = (boolean) inStream.readObject();
-                    return opResult;
+
+                    Object o = inStream.readObject();
+
+                    if (o instanceof Boolean) {
+                        opResult = (Boolean) o;
+                        return opResult;
+                    } else {
+                        System.out.println("CancellaMessaggio FAILED.");
+                        return false;
+                    }
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
