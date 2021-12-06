@@ -2,9 +2,7 @@ package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Classe Email volta alla visualizzazione su view della classe serializzabile ValidEmail
