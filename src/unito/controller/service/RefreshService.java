@@ -36,8 +36,6 @@ public class RefreshService implements Runnable {
 
                 Thread thread = new Thread(refreshService);
 
-                System.out.println("Loop: " + loop);
-
                 thread.start();
 
                 try {
@@ -75,7 +73,6 @@ public class RefreshService implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("sono qui");
         } while (loop);
     }
 
