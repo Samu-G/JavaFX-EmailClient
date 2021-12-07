@@ -21,13 +21,10 @@ public class Launcher extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         emailManager.setViewFactory(viewFactory);
-        if (emailManager.emailAccounts.size() > 0) {
-            viewFactory.showAccountSelectionWindow();
-        }
-        else {
+        if (emailManager.emailAccounts.size() == 0) {
             ViewFactory.viewAlert("Attenzione", "Nessun account salvato nel client.");
-            stop();
         }
+        viewFactory.showAccountSelectionWindow();
     }
 
     @Override

@@ -4,6 +4,7 @@ import unito.EmailManager;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
+import unito.view.ViewFactory;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -101,19 +102,18 @@ public class ClientService implements Callable<ClientRequestResult> {
                 if (!((List<?>) o).isEmpty()) {
                     if (((List<?>) o).get(0) instanceof ValidEmail) {
                         myEmail = (List<ValidEmail>) o;
+                        System.out.println("Handshaking completed.");
                     }
-                }
-            }
+                } else {
 
-            if (myEmail != null) {
+                }
                 emailManager.loadEmail(myEmail);
-                System.out.println("Handshaking completed.");
                 return true;
             } else {
-                System.out.println("Handshaking FAILED. List<ValidEmail> is null or not valid.");
+                System.out.println("Handshaking FAILED. List<ValidEmail> is not valid.");
+                ViewFactory.viewAlert("Errore", "Ricevuto un oggetto incompatibile da parte del server.");
                 return false;
             }
-
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
             System.out.println("Handshaking FAILED.");
