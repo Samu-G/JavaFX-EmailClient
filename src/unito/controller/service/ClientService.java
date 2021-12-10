@@ -5,7 +5,6 @@ import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.view.ViewFactory;
-
 import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
@@ -27,6 +26,11 @@ public class ClientService implements Callable<ClientRequestResult> {
     private ObjectOutputStream outStream;
     private ObjectInputStream inStream;
 
+    /**
+     * @param emailManager
+     * @param clientRequestType type of request
+     * @param toSend email to send
+     */
     public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
         ValidAccount myCredentialsTemp;
         this.emailManager = emailManager;
@@ -40,6 +44,12 @@ public class ClientService implements Callable<ClientRequestResult> {
         this.emailToSend = toSend;
     }
 
+    /**
+     * Apre la socket verso il Server e gestisce il risultato della richiesta
+     *
+     * @return il risultato della richiesta (ClientRequestResult)
+     * @throws Exception
+     */
     @Override
     public ClientRequestResult call() throws Exception {
         try {
@@ -253,6 +263,5 @@ public class ClientService implements Callable<ClientRequestResult> {
             e.printStackTrace();
         }
     }
-
 
 }

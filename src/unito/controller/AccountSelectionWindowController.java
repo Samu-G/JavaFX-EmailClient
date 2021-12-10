@@ -11,11 +11,13 @@ import unito.controller.service.ClientRequestType;
 import unito.controller.service.ClientService;
 import unito.model.EmailAccount;
 import unito.view.ViewFactory;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.FutureTask;
 
+/**
+ * Classe del controller utilizzato per la finestra di selezione di un account registrato presso il Server
+ */
 public class AccountSelectionWindowController extends BaseController implements Initializable {
 
     @FXML
@@ -24,12 +26,17 @@ public class AccountSelectionWindowController extends BaseController implements 
     @FXML
     private ChoiceBox<EmailAccount> accountPicker;
 
+    /**
+     * @param emailManager
+     * @param viewFactory   abstract view controller
+     * @param fxmlName      fxml file path of this controller
+     */
     public AccountSelectionWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
         super(emailManager, viewFactory, fxmlName);
     }
 
     /**
-     * Azione legata al bottone LOGIN della finestra di selezione dell'account
+     * Azione legata al bottone "login" della finestra di selezione dell'account
      */
     @FXML
     void loginButtonAction() {
@@ -82,6 +89,12 @@ public class AccountSelectionWindowController extends BaseController implements 
         accountPicker.setValue(emailManager.getCurrentAccount());
     }
 
+    /**
+     * Inizializza il controller
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpMenuButton();

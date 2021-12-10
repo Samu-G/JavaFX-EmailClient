@@ -33,6 +33,9 @@ public class EmailManager {
     private Thread refreshThread;
     private RefreshService refreshService;
 
+    /**
+     * @param validAccountList lista di ValidAccount
+     */
     public EmailManager(List<ValidAccount> validAccountList) {
         this.emailAccounts = FXCollections.observableArrayList();
         this.currentAccount = new SimpleObjectProperty<>();
@@ -41,6 +44,11 @@ public class EmailManager {
 
     }
 
+    /**
+     * Attiva il refresh automatico
+     *
+     * @param refreshRate tasso di refresh
+     */
     public void turnOnAutoRefresh(long refreshRate) {
         if (refreshThread == null) {
             refreshService = new RefreshService(this, refreshRate, true);
@@ -51,6 +59,9 @@ public class EmailManager {
         refreshThread.start();
     }
 
+    /**
+     * Disattiva il refresh automatico
+     */
     public void turnOffAutoRefresh() {
         if (refreshThread != null) {
             refreshService.setLoop(false);
@@ -69,7 +80,6 @@ public class EmailManager {
 
     public void setSelectedMessage(Email message) {
         this.selectedMessage = message;
-
     }
 
     public void setAddressesNotFoundedBuffer(List<String> addressesNotFoundedBuffer) {
@@ -104,7 +114,7 @@ public class EmailManager {
      * Trasforma gli oggetti validEmail (serializzabili) in oggetti Email (non serializzabili)
      * e li salva all'interno di una ObservableList.
      *
-     * @param validEmailList QUESTA E' UNA LISTA DI VALIDEMAIL che restituisce loadPersistence
+     * @param validEmailList questa è una lista di ValidEmail che restituisce loadPersistence
      */
     public void loadEmail(List<ValidEmail> validEmailList) {
         if (validEmailList != null) {
@@ -119,7 +129,7 @@ public class EmailManager {
      * Trasforma gli oggetti validAccount (serializzabili) in oggetti EmailAccount (non serializzabili)
      * e li salva all'interno di una ObservableList.
      *
-     * @param validAccountList QUESTA E' UNA LISTA DI VALIDACCOUNT che restituisce loadPersistence
+     * @param validAccountList questa è una lista di ValidAccount che restituisce loadPersistence
      */
     private void loadValidAccountFromPersistence(List<ValidAccount> validAccountList) {
         for (int i = 0; i < validAccountList.size(); i++) {
@@ -128,12 +138,18 @@ public class EmailManager {
         }
     }
 
+    /**
+     * Utilizzato per fare il refresh dell'email
+     */
     public void manualRefresh() {
         RefreshService refreshService = new RefreshService(this, 0, false);
         Thread t = new Thread(refreshService);
         t.start();
     }
 
+    /**
+     * @param refreshRate velocità del refresh
+     */
     public void setRefreshSpeed(long refreshRate) {
         if (refreshService == null) {
             turnOnAutoRefresh(refreshRate);
@@ -141,6 +157,9 @@ public class EmailManager {
         refreshService.setRefreshRate(refreshRate);
     }
 
+    /**
+     * Crea un ClientService per gestire la richiesta (CANCELLAMESSAGGIO), poi gestisce il risultato della richiesta
+     */
     public void deleteSelectedMessage() {
         ClientService clientService = new ClientService(this, ClientRequestType.CANCELLAMESSAGGIO, getSelectedMessage());
         FutureTask<ClientRequestResult> deleteService = new FutureTask<>(clientService);
@@ -171,11 +190,20 @@ public class EmailManager {
 
     }
 
+    /**
+     * Stabilisce la ViewFactory per l'EmailManager
+     *
+     * @param viewFactory riferimento alla ViewFactory per l'EmailManager
+     */
     public void setViewFactory(ViewFactory viewFactory) {
         this.viewFactory = viewFactory;
     }
 
-
+    /**
+     * Risponde all'email selezionata
+     *
+     * @param emailSelected email selezionata
+     */
     public void reply(Email emailSelected) {
         if (emailSelected != null) {
             String recipients = emailSelected.getRecipients();
@@ -187,7 +215,11 @@ public class EmailManager {
         }
     }
 
-
+    /**
+     * Risponde a tutti i destinatari inseriti
+     *
+     * @param emailSelected email selezionata
+     */
     public void replyAll(Email emailSelected) {
         if (emailSelected != null) {
             viewFactory.showComposeWindow();
@@ -198,7 +230,11 @@ public class EmailManager {
         }
     }
 
-
+    /**
+     * Inoltra l'email selezionata
+     *
+     * @param emailSelected email selezionata
+     */
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
             viewFactory.showComposeWindow();
@@ -210,6 +246,11 @@ public class EmailManager {
 
     }
 
+    /**
+     * Cancella l'email selezionata
+     *
+     * @param emailSelected email selezionata
+     */
     public void delete(Email emailSelected) {
         if (emailSelected != null) {
             this.deleteSelectedMessage();

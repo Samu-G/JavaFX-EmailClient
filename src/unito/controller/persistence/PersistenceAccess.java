@@ -12,11 +12,13 @@ import java.util.List;
  */
 public class PersistenceAccess {
 
-    private static String VALID_ACCOUNTS_LOCATION = "src/unito/controller/persistence/validAccounts.ser";
-    private static Encoder encoder = new Encoder();
+    private static final String VALID_ACCOUNTS_LOCATION = "src/unito/controller/persistence/validAccounts.ser";
+    private static final Encoder encoder = new Encoder();
 
     /**
      * Legge il file di persistenza salvato nella locazione indicata da VALID_ACCOUNT_LOCATION e restituisce la lista degli account letti dal file
+     *
+     * @return la lista di ValidAccount salvati sul file di persitenza
      */
     public static List<ValidAccount> loadFromPersistenceValidAccount() {
 
@@ -51,6 +53,7 @@ public class PersistenceAccess {
         return resultList;
     }
 
+    //TODO: Questi metodi sono privati ma commentati, non dovremmo fare solo di quelli publici?
     /**
      * Prende una lista di "ValidAccount" e ne decripta le password
      *
@@ -78,7 +81,7 @@ public class PersistenceAccess {
     /**
      * Salva nel file di persistenza gli account salvati nel client al momento della chiusura
      *
-     * @param validAccounts la lista OSSERVABILE di account da salvare nel file di persistenza
+     * @param validAccounts la lista osservabile di account da salvare nel file di persistenza
      */
     public static void saveToPersistence(ObservableList<EmailAccount> validAccounts) {
         List<ValidAccount> validAccountList = new ArrayList<ValidAccount>();

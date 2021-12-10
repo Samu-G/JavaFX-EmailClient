@@ -12,11 +12,18 @@ public class EmailAccount {
 
     /*Constructor*/
 
+    /**
+     * @param address address of account
+     * @param password password of account
+     */
     public EmailAccount(String address, String password) {
         this.address = new SimpleStringProperty(address);
         this.password = new SimpleStringProperty(password);
     }
 
+    /**
+     * @param validAccount
+     */
     public EmailAccount(ValidAccount validAccount) {
         this.address = new SimpleStringProperty(validAccount.getAddress());
         this.password = new SimpleStringProperty(validAccount.getPassword());
@@ -34,6 +41,11 @@ public class EmailAccount {
 
     /*Aux*/
 
+    /**
+     * Crea una stringa adatta per la visualizzazione
+     *
+     * @return l'oggetto nella relativa rappresentazione di stringa
+     */
     @Override
     public String toString() {
         return "address: " + address.get() + " password: " + password.get();

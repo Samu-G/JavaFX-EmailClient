@@ -1,10 +1,7 @@
 package unito.controller.service;
 
-import javafx.application.Platform;
-import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.view.ViewFactory;
-
 import java.util.concurrent.FutureTask;
 
 /**
@@ -17,6 +14,11 @@ public class RefreshService implements Runnable {
     private boolean loop;
     private boolean serverOnline;
 
+    /**
+     * @param emailManager
+     * @param refreshRate refresh rate
+     * @param loop boolean to cycle
+     */
     public RefreshService(EmailManager emailManager, long refreshRate, boolean loop) {
         super();
         this.emailManager = emailManager;
@@ -24,6 +26,9 @@ public class RefreshService implements Runnable {
         this.loop = loop;
     }
 
+    /**
+     * Crea un ClientService per gestire la richiesta (RICEVIMESSAGGIO), usa un FutureTask per ottenere il risultato della richiesta
+     */
     @Override
     public void run() {
         do {
@@ -63,10 +68,7 @@ public class RefreshService implements Runnable {
 
                             serverOnline = false;
                         }
-
                     }
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,10 +78,16 @@ public class RefreshService implements Runnable {
         } while (loop);
     }
 
+    /**
+     * @param rate velocità del refresh
+     */
     public void setRefreshRate(long rate) {
         this.refreshRateInMs = rate;
     }
 
+    /**
+     * @param b true per continuare il refresh automatico, false per interromperlo
+     */
     public void setLoop(boolean b) {
         this.loop = b;
     }

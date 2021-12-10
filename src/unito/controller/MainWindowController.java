@@ -1,6 +1,5 @@
 package unito.controller;
 
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,10 +12,12 @@ import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.model.Email;
 import unito.view.ViewFactory;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Classe del controller utilizzato per la finestra principale dell'account (Vedere le email, ...)
+ */
 public class MainWindowController extends BaseController implements Initializable {
 
     @FXML
@@ -51,7 +52,11 @@ public class MainWindowController extends BaseController implements Initializabl
     private final MenuItem Inoltra;
     private final MenuItem Cancella;
 
-
+    /**
+     * @param emailManager
+     * @param viewFactory   abstract view controller
+     * @param fxmlName      fxml file path of this controller
+     */
     public MainWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
         super(emailManager, viewFactory, fxmlName);
         this.Rispondi = new MenuItem("Rispondi");
@@ -141,29 +146,38 @@ public class MainWindowController extends BaseController implements Initializabl
 
     /* Context table menu function */
 
-    public void reply() {
-        emailManager.reply(emailManager.getSelectedMessage());
-    }
+    //TODO: Solo replyAll deve essere impostato su privato?
 
-    private void replyAll() {
-        emailManager.replyAll(emailManager.getSelectedMessage());
-    }
+    /**
+     * Risponde all'email selezionata
+     */
+    public void reply() { emailManager.reply(emailManager.getSelectedMessage()); }
 
-    public void forward() {
-        emailManager.forward(emailManager.getSelectedMessage());
-    }
+    private void replyAll() { emailManager.replyAll(emailManager.getSelectedMessage()); }
 
-    public void delete() {
-        emailManager.delete(emailManager.getSelectedMessage());
-    }
+    /**
+     * Inoltra l'email selezionata
+     */
+    public void forward() { emailManager.forward(emailManager.getSelectedMessage()); }
+
+    /**
+     * Cancella l'email selezionata
+     */
+    public void delete() { emailManager.delete(emailManager.getSelectedMessage()); }
 
     /* Menu button action */
 
+    /**
+     * Mostra la finestra per comporre una nuova email
+     */
     @FXML
     void newMessageAction() {
         viewFactory.showComposeWindow();
     }
 
+    /**
+     * Chiude l'applicazione
+     */
     @FXML
     void quitAction() {
         Stage stage = (Stage) emailsTableView.getScene().getWindow();
@@ -171,21 +185,39 @@ public class MainWindowController extends BaseController implements Initializabl
         System.exit(0);
     }
 
+    /**
+     * Aggiorna la lista di email manualmente
+     */
     @FXML
     void manualUpdateMessageAction() {
         emailManager.manualRefresh();
     }
 
+    /**
+     * Attiva il refresh automatico (5000 ms)
+     *
+     * @param event
+     */
     @FXML
     void automaticRefreshAction(ActionEvent event) {
             emailManager.turnOnAutoRefresh(5000);
     }
 
+    /**
+     * Disattiva il refresh automatico
+     *
+     * @param event
+     */
     @FXML
     void disableAutomaticRefreshAction(ActionEvent event) {
         emailManager.turnOffAutoRefresh();
     }
 
+    /**
+     * Fissa la velocità del refresh
+     *
+     * @param event
+     */
     @FXML
     void setRefreshSpeed(ActionEvent event) {
         MenuItem itemPressed = (MenuItem) event.getSource();
@@ -201,6 +233,12 @@ public class MainWindowController extends BaseController implements Initializabl
         this.logLabel.setText(s);
     }
 
+    /**
+     * Inizializza il controller
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpEmailsList();

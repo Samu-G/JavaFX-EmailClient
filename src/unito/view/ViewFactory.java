@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.controller.*;
 import unito.model.Email;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -41,14 +40,16 @@ public class ViewFactory {
         return messageWindowController;
     }
 
-
+    /**
+     * @param emailManager
+     */
     public ViewFactory(EmailManager emailManager) {
         this.emailManager = emailManager;
         activeStages = new ArrayList<Stage>();
     }
 
     /**
-     * Create controller for LoginWindow. Then, initialize the account selection window.
+     * Crea un controller per la finestra di Login, dopo inizializza la finestra di selezione dell'account
      */
     public void showAccountSelectionWindow() {
         System.out.println("showAccountSelectionWindow() called.");
@@ -57,7 +58,7 @@ public class ViewFactory {
     }
 
     /**
-     * Create controller for MainWindow. Then, initialize the Main window.
+     * Crea il controller per la finestra principale, dopo inizializza la finestra principale
      */
     public void showMainWindow() {
         System.out.println("showMainWindow() called.");
@@ -66,7 +67,7 @@ public class ViewFactory {
     }
 
     /**
-     * Create controller for ComposeWindow. Then, initialize the Composing window.
+     * Crea il controller per la finestra di composizione, dopo inizializza la finestra di composizione
      */
     public void showComposeWindow() {
         System.out.println("showComposeWindow() called.");
@@ -74,17 +75,18 @@ public class ViewFactory {
         initializeView(composeWindowController, "Componi un messaggio");
     }
 
+    /**
+     * Crea il controller per la finestra di visualizzazione dell'email, dopo inizializza la finestra di visualizzazione
+     *
+     * @param windowTitle titolo della finestra
+     * @param emailToView l'email selezionata
+     */
     public void showMessageWindow(String windowTitle, Email emailToView) {
         System.out.println("showMessageWindow() called.");
         messageWindowController = new MessageWindowController(emailManager, this, "MessageWindow.fxml", emailToView);
         initializeView(messageWindowController, windowTitle);
     }
 
-    /**
-     * Load fxml file, set the controller, create and show the Scene/Stage.
-     *
-     * @param baseController Controller of the Stage
-     */
     private void initializeView(BaseController baseController, String windowTitle) {
         System.out.println("initializeView() called.");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(baseController.getFxmlName()));
@@ -104,16 +106,27 @@ public class ViewFactory {
         activeStages.add(stage);
     }
 
+    /**
+     * Chiude una finestra rimuovendola dalla lista activeStage
+     *
+     * @param stageToClose finestra da chiudere
+     */
     public void closeStage(Stage stageToClose) {
         activeStages.remove(stageToClose);
         stageToClose.close();
     }
 
+    /**
+     * Crea un alert per informare il Client
+     *
+     * @param title titolo dell'alert
+     * @param contentText contenuto dell'alert
+     */
     public static void viewAlert(String title, String contentText) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("viewAllert() called.");
+                System.out.println("viewAlert() called.");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle(title);
                 alert.setHeaderText(null);
@@ -123,6 +136,9 @@ public class ViewFactory {
         });
     }
 
+    /**
+     * @param s la stringa per la label
+     */
     public void writeOnLogLabel(String s) {
         ViewFactory vf = this;
         Platform.runLater(new Runnable() {

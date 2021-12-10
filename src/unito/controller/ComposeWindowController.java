@@ -15,6 +15,9 @@ import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Classe del controller utilizzato per la finestra di composizione
+ */
 public class ComposeWindowController extends BaseController {
 
     @FXML
@@ -31,6 +34,11 @@ public class ComposeWindowController extends BaseController {
 
     private boolean dirtyTextArea = true;
 
+    /**
+     * @param emailManager
+     * @param viewFactory   abstract view controller
+     * @param fxmlName      fxml file path of this controller
+     */
     public ComposeWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
         super(emailManager, viewFactory, fxmlName);
     }
@@ -68,6 +76,9 @@ public class ComposeWindowController extends BaseController {
         return true;
     }
 
+    /**
+     * Controlla che il campo destinatari sia scritto correttamente, poi crea un ClientService per inviare il messaggio e controlla il risultato della richiesta
+     */
     @FXML
     void sendMessageAction() {
         System.out.println("sendMessageAction() called.");
@@ -107,21 +118,20 @@ public class ComposeWindowController extends BaseController {
                 switch (r) {
                     case SUCCESS:
                         ViewFactory.viewAlert("Successo", "Mail inviata con successo");
-                        return;
+                        break;
 
                     case ERROR:
                         ViewFactory.viewAlert("Errore", "C'è stato qualche errore nell'invio del messaggio");
-                        return;
+                        break;
 
                     case FAILED_BY_CREDENTIALS:
                         ViewFactory.viewAlert("Errore", "Errore nelle credenziali");
-                        return;
+                        break;
 
                     case FAILED_BY_SERVER_DOWN:
                         ViewFactory.viewAlert("Errore", "Il server è spento");
-                        return;
+                        break;
                 }
-
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -130,6 +140,9 @@ public class ComposeWindowController extends BaseController {
 
     }
 
+    /**
+     * Pulisce il campo dei destinatari
+     */
     @FXML
     void clearTextAreaAction() {
         if (dirtyTextArea) {

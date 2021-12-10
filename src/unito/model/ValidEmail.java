@@ -26,6 +26,9 @@ public class ValidEmail implements Serializable {
 
     /*Constructor*/
 
+    /**
+     * @param email
+     */
     public ValidEmail(Email email) {
         this.identifier = email.getIdentifier();
         this.sender = email.getSender();
@@ -69,6 +72,12 @@ public class ValidEmail implements Serializable {
 
     /*Aux*/
 
+    /**
+     * Controlla se l'oggetto corrisponde alla ValidEmail corrente
+     *
+     * @param o l'oggetto da confrontare
+     * @return true se sono uguali, altrimenti false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,9 +89,14 @@ public class ValidEmail implements Serializable {
                 Objects.equals(date, that.getDate());
     }
 
+    /**
+     * Crea una stringa adatta per la visualizzazione
+     *
+     * @return l'oggetto nella relativa rappresentazione di stringa
+     */
     @Override
     public String toString() {
-        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Reciver: " + Arrays.toString(getRecipients()) + "\n" +
+        return "Identifier is: " + getIdentifier() + "\n" + "Sender: " + getSender() +"\n" + "Receiver: " + Arrays.toString(getRecipients()) + "\n" +
                 "Subject: " + getSubject() + "\n" + "Size: " + getSize() + "\n" + "Date: " + getDate() +"\n" + "Text: " + getTextMessage() +"\n";
     }
 }
