@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Classe usata per manipolare la view (inizializzare le Window, connettere il controller alla View, ... )
  */
-public class ViewFactory {
+public class ViewManager {
 
     private final EmailManager emailManager;
     private final ArrayList<Stage> activeStages;
@@ -23,10 +23,6 @@ public class ViewFactory {
     private MainWindowController mainWindowController;
     private ComposeWindowController composeWindowController;
     private MessageWindowController messageWindowController;
-
-    public AccountSelectionWindowController getAccountSelectionWindowController() {
-        return accountSelectionWindowController;
-    }
 
     public MainWindowController getMainWindowController() {
         return mainWindowController;
@@ -36,14 +32,10 @@ public class ViewFactory {
         return composeWindowController;
     }
 
-    public MessageWindowController getMessageWindowController() {
-        return messageWindowController;
-    }
-
     /**
      * @param emailManager
      */
-    public ViewFactory(EmailManager emailManager) {
+    public ViewManager(EmailManager emailManager) {
         this.emailManager = emailManager;
         activeStages = new ArrayList<Stage>();
     }
@@ -137,10 +129,12 @@ public class ViewFactory {
     }
 
     /**
+     * Setter stringa di log della finestra principale
+     *
      * @param s la stringa per la label
      */
     public void writeOnLogLabel(String s) {
-        ViewFactory vf = this;
+        ViewManager vf = this;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

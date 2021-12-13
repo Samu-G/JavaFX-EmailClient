@@ -1,7 +1,7 @@
 package unito.controller.service;
 
 import unito.EmailManager;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -15,19 +15,19 @@ public class RefreshService implements Runnable {
     private boolean serverOnline;
 
     /**
-     * @param emailManager
-     * @param refreshRate refresh rate
-     * @param loop boolean to cycle
+     * @param emailManager riferimento all' EmailManager dell'app
+     * @param refreshRate velocità del refresh
+     * @param loop valore booleano per ciclare
      */
     public RefreshService(EmailManager emailManager, long refreshRate, boolean loop) {
-        super();
         this.emailManager = emailManager;
         this.refreshRateInMs = refreshRate;
         this.loop = loop;
     }
 
     /**
-     * Crea un ClientService per gestire la richiesta (RICEVIMESSAGGIO), usa un FutureTask per ottenere il risultato della richiesta
+     * Crea un ClientService per gestire la richiesta (RICEVIMESSAGGIO),
+     * usa un FutureTask per ottenere il risultato della richiesta
      */
     @Override
     public void run() {
@@ -48,7 +48,7 @@ public class RefreshService implements Runnable {
                     switch (r) {
                         case SUCCESS -> {
                             if (!serverOnline && loop) {
-                                ViewFactory.viewAlert("Avviso", "Connessione ristabilita con il server.");
+                                ViewManager.viewAlert("Avviso", "Connessione ristabilita con il server.");
                             }
                             serverOnline = true;
                             System.out.println("Refresh Done!");
@@ -63,7 +63,7 @@ public class RefreshService implements Runnable {
                             emailManager.getViewFactory().writeOnLogLabel("ERRORE: Refresh automatico fallito a causa del server che è spento. Autenticato come " + emailManager.getCurrentAccount().getAddress());
 
                             if (serverOnline) {
-                                ViewFactory.viewAlert("Errore", "Connessione interrotta con il server. Tentativo di riconnessione in corso...");
+                                ViewManager.viewAlert("Errore", "Connessione interrotta con il server. Tentativo di riconnessione in corso...");
                             }
 
                             serverOnline = false;

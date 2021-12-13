@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe non generica usata per leggere e scrivere sul file di persistenza gli account salvati nel client al momento dell'appertura / chiusura della applicazione
+ * Classe non generica usata per leggere e scrivere sul file di persistenza gli account salvati nel client al momento dell'apertura / chiusura della applicazione
  */
 public class PersistenceAccess {
 
@@ -53,12 +53,6 @@ public class PersistenceAccess {
         return resultList;
     }
 
-    //TODO: Questi metodi sono privati ma commentati, non dovremmo fare solo di quelli publici?
-    /**
-     * Prende una lista di "ValidAccount" e ne decripta le password
-     *
-     * @param persistedList la lista con le password da decriptare
-     */
     private static void decodePasswords(List<ValidAccount> persistedList) {
         for (ValidAccount validAccount : persistedList) {
             String originalPassword = validAccount.getPassword();
@@ -66,11 +60,6 @@ public class PersistenceAccess {
         }
     }
 
-    /**
-     * Prende una lista di "ValidAccount" e ne cripta le password
-     *
-     * @param persistedList la lista con le password da criptare
-     */
     private static void encodePasswords(List<ValidAccount> persistedList) {
         for (ValidAccount validAccount : persistedList) {
             String originalPassword = validAccount.getPassword();

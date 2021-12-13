@@ -12,23 +12,24 @@ import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.model.EmailAccount;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
+
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
 /**
- * Classe che gestisce le funzioni principali dell'applicazione
+ * Classe manager che gestisce le funzioni principali dell'applicazione
  */
 public class EmailManager {
 
     /* Model */
-    public ObservableList<EmailAccount> emailAccounts;
+    private final ObservableList<EmailAccount> emailAccounts;
     private final SimpleObjectProperty<EmailAccount> currentAccount;
-    public ObservableList<Email> emailList;
+    private final ObservableList<Email> emailList;
     private Email selectedMessage;
     private List<String> addressesNotFoundedBuffer;
     /* View */
-    private ViewFactory viewFactory;
+    private ViewManager viewManager;
     /* Thread */
     private Thread refreshThread;
     private RefreshService refreshService;
@@ -90,8 +91,8 @@ public class EmailManager {
         return addressesNotFoundedBuffer;
     }
 
-    public ViewFactory getViewFactory() {
-        return viewFactory;
+    public ViewManager getViewFactory() {
+        return viewManager;
     }
 
     public ObservableList<Email> getEmailList() {
@@ -139,7 +140,7 @@ public class EmailManager {
     }
 
     /**
-     * Utilizzato per fare il refresh dell'email
+     * Utilizzato per fare il refresh manuale dell'email
      */
     public void manualRefresh() {
         RefreshService refreshService = new RefreshService(this, 0, false);
@@ -148,6 +149,8 @@ public class EmailManager {
     }
 
     /**
+     * Imposta la velocità di refresh della casella email in millisecondi
+     *
      * @param refreshRate velocità del refresh
      */
     public void setRefreshSpeed(long refreshRate) {
@@ -175,11 +178,11 @@ public class EmailManager {
 
                     switch (r) {
                         case SUCCESS:
-                            ViewFactory.viewAlert("Cancellazione messaggio", "Cancellazione messaggio avvenuta con successo");
+                            ViewManager.viewAlert("Cancellazione messaggio", "Cancellazione messaggio avvenuta con successo");
                             break;
 
                         case ERROR, FAILED_BY_CREDENTIALS, FAILED_BY_SERVER_DOWN:
-                            ViewFactory.viewAlert("Cancellazione messaggio", "Errore nella comunicazione con il server");
+                            ViewManager.viewAlert("Cancellazione messaggio", "Errore nella comunicazione con il server");
                             break;
                     }
                 } catch (Exception e) {
@@ -191,16 +194,14 @@ public class EmailManager {
     }
 
     /**
-     * Stabilisce la ViewFactory per l'EmailManager
-     *
-     * @param viewFactory riferimento alla ViewFactory per l'EmailManager
+     * @param viewManager riferimento alla ViewManager per l'EmailManager
      */
-    public void setViewFactory(ViewFactory viewFactory) {
-        this.viewFactory = viewFactory;
+    public void setViewFactory(ViewManager viewManager) {
+        this.viewManager = viewManager;
     }
 
     /**
-     * Risponde all'email selezionata
+     * Risponde all'email selezionata aprendo una nuova finestra
      *
      * @param emailSelected email selezionata
      */
@@ -208,46 +209,46 @@ public class EmailManager {
         if (emailSelected != null) {
             String recipients = emailSelected.getRecipients();
             if (recipients != null) {
-                viewFactory.showComposeWindow();
-                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
-                viewFactory.getComposeWindowController().setRecipientsTextField(emailSelected.getSender());
+                viewManager.showComposeWindow();
+                viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getSender());
             }
         }
     }
 
     /**
-     * Risponde a tutti i destinatari inseriti
+     * Risponde a tutti i destinatari della email selezionata, aprendo una nuova finestra
      *
      * @param emailSelected email selezionata
      */
     public void replyAll(Email emailSelected) {
         if (emailSelected != null) {
-            viewFactory.showComposeWindow();
-            if (viewFactory.getComposeWindowController() != null) {
-                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
-                viewFactory.getComposeWindowController().setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
+            viewManager.showComposeWindow();
+            if (viewManager.getComposeWindowController() != null) {
+                viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewManager.getComposeWindowController().setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
             }
         }
     }
 
     /**
-     * Inoltra l'email selezionata
+     * Inoltra l'email selezionata, aprendo una nuova finestra
      *
      * @param emailSelected email selezionata
      */
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
-            viewFactory.showComposeWindow();
-            if (viewFactory.getComposeWindowController() != null) {
-                viewFactory.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
-                viewFactory.getComposeWindowController().setMessageTextArea(emailSelected.getTextMessage());
+            viewManager.showComposeWindow();
+            if (viewManager.getComposeWindowController() != null) {
+                viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
+                viewManager.getComposeWindowController().setMessageTextArea(emailSelected.getTextMessage());
             }
         }
 
     }
 
     /**
-     * Cancella l'email selezionata
+     * Cancella l'email selezionata (sincronizzandosi con il server)
      *
      * @param emailSelected email selezionata
      */

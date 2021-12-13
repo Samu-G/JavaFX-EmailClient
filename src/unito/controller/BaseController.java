@@ -1,25 +1,25 @@
 package unito.controller;
 
 import unito.EmailManager;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
 
 /**
  * Questa è una classe astratta che esplicita la base dei controller.
  */
 public abstract class BaseController {
 
-    protected EmailManager emailManager;
-    protected ViewFactory viewFactory;
+    protected final EmailManager emailManager;
+    protected ViewManager viewManager;
     private final String fxmlName;
 
     /**
-     * @param emailManager
-     * @param viewFactory abstract view controller
-     * @param fxmlName fxml file path of this controller
+     * @param emailManager riferimento all'emailManger dell'applicazione
+     * @param viewManager riferimento al viewManager dell'applicazione
+     * @param fxmlName path del file .fxml
      */
-    public BaseController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
+    public BaseController(EmailManager emailManager, ViewManager viewManager, String fxmlName) {
         this.emailManager = emailManager;
-        this.viewFactory = viewFactory;
+        this.viewManager = viewManager;
         this.fxmlName = fxmlName;
     }
 

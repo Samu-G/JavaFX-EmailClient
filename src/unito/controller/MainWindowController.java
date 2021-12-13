@@ -11,7 +11,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.model.Email;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -53,12 +54,12 @@ public class MainWindowController extends BaseController implements Initializabl
     private final MenuItem Cancella;
 
     /**
-     * @param emailManager
-     * @param viewFactory   abstract view controller
-     * @param fxmlName      fxml file path of this controller
+     * @param emailManager riferimento all'emailManger dell'applicazione
+     * @param viewManager riferimento al viewManager dell'applicazione
+     * @param fxmlName path del file .fxml
      */
-    public MainWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
-        super(emailManager, viewFactory, fxmlName);
+    public MainWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName) {
+        super(emailManager, viewManager, fxmlName);
         this.Rispondi = new MenuItem("Rispondi");
         this.Rispondi_a_tutti = new MenuItem("Rispondi a tutti");
         this.Inoltra = new MenuItem("Inoltra");
@@ -97,14 +98,12 @@ public class MainWindowController extends BaseController implements Initializabl
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 1) {
 
-                        System.out.println("ONE clicked");
-
                         Email message = emailsTableView.getSelectionModel().getSelectedItem();
 
                         if (message != null) {
                             emailManager.setSelectedMessage(message);
                         } else {
-                            System.out.println("message is null");
+                            System.out.println("setUpMessageSelection(): message is null");
                         }
 
                     } else if (mouseEvent.getClickCount() == 2) {
@@ -113,10 +112,10 @@ public class MainWindowController extends BaseController implements Initializabl
                         if (message != null) {
                             emailManager.setSelectedMessage(message);
                             String windowTitle = message.getSubject();
-                            viewFactory.showMessageWindow(windowTitle, message);
+                            viewManager.showMessageWindow(windowTitle, message);
                             emailsTableView.getSelectionModel().clearSelection();
                         } else {
-                            System.out.println("message is null");
+                            System.out.println("setUpMessageSelection(): message is null");
                         }
 
                     }
@@ -146,24 +145,13 @@ public class MainWindowController extends BaseController implements Initializabl
 
     /* Context table menu function */
 
-    //TODO: Solo replyAll deve essere impostato su privato?
-
-    /**
-     * Risponde all'email selezionata
-     */
-    public void reply() { emailManager.reply(emailManager.getSelectedMessage()); }
+    private void reply() { emailManager.reply(emailManager.getSelectedMessage()); }
 
     private void replyAll() { emailManager.replyAll(emailManager.getSelectedMessage()); }
 
-    /**
-     * Inoltra l'email selezionata
-     */
-    public void forward() { emailManager.forward(emailManager.getSelectedMessage()); }
+    private void forward() { emailManager.forward(emailManager.getSelectedMessage()); }
 
-    /**
-     * Cancella l'email selezionata
-     */
-    public void delete() { emailManager.delete(emailManager.getSelectedMessage()); }
+    private void delete() { emailManager.delete(emailManager.getSelectedMessage()); }
 
     /* Menu button action */
 
@@ -172,7 +160,7 @@ public class MainWindowController extends BaseController implements Initializabl
      */
     @FXML
     void newMessageAction() {
-        viewFactory.showComposeWindow();
+        viewManager.showComposeWindow();
     }
 
     /**
@@ -181,8 +169,7 @@ public class MainWindowController extends BaseController implements Initializabl
     @FXML
     void quitAction() {
         Stage stage = (Stage) emailsTableView.getScene().getWindow();
-        viewFactory.closeStage(stage);
-        System.exit(0);
+        viewManager.closeStage(stage);
     }
 
     /**
@@ -195,21 +182,17 @@ public class MainWindowController extends BaseController implements Initializabl
 
     /**
      * Attiva il refresh automatico (5000 ms)
-     *
-     * @param event
      */
     @FXML
-    void automaticRefreshAction(ActionEvent event) {
+    void automaticRefreshAction() {
             emailManager.turnOnAutoRefresh(5000);
     }
 
     /**
      * Disattiva il refresh automatico
-     *
-     * @param event
      */
     @FXML
-    void disableAutomaticRefreshAction(ActionEvent event) {
+    void disableAutomaticRefreshAction() {
         emailManager.turnOffAutoRefresh();
     }
 
@@ -229,16 +212,15 @@ public class MainWindowController extends BaseController implements Initializabl
         }
     }
 
+    /**
+     * Setter stringa di log della finestra principale
+     *
+     * @param s la stringa per la label
+     */
     public void setLabel(String s) {
         this.logLabel.setText(s);
     }
 
-    /**
-     * Inizializza il controller
-     *
-     * @param url
-     * @param resourceBundle
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpEmailsList();

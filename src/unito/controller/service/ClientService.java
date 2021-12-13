@@ -4,11 +4,14 @@ import unito.EmailManager;
 import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
+
+import javax.swing.text.ViewFactory;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -27,9 +30,9 @@ public class ClientService implements Callable<ClientRequestResult> {
     private ObjectInputStream inStream;
 
     /**
-     * @param emailManager
-     * @param clientRequestType type of request
-     * @param toSend email to send
+     * @param emailManager riferimento all' EmailManager dell'app
+     * @param clientRequestType tipo di richiesta voluta dal Client
+     * @param toSend Email (nullable) da inviare al Server
      */
     public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
         ValidAccount myCredentialsTemp;
@@ -48,10 +51,9 @@ public class ClientService implements Callable<ClientRequestResult> {
      * Apre la socket verso il Server e gestisce il risultato della richiesta
      *
      * @return il risultato della richiesta (ClientRequestResult)
-     * @throws Exception
      */
     @Override
-    public ClientRequestResult call() throws Exception {
+    public ClientRequestResult call() {
         try {
             String nomeHost = InetAddress.getLocalHost().getHostName();
 
@@ -65,7 +67,12 @@ public class ClientService implements Callable<ClientRequestResult> {
 
                 outStream.writeObject(myCredentials);
 
-                ClientRequestResult authenticationResult = (ClientRequestResult) inStream.readObject();
+                ClientRequestResult authenticationResult = null;
+                Object o = inStream.readObject();
+
+                if (o instanceof ClientRequestResult) {
+                    authenticationResult = (ClientRequestResult) o;
+                }
 
                 boolean operationResult;
 
@@ -93,8 +100,10 @@ public class ClientService implements Callable<ClientRequestResult> {
             } finally {
                 closeStream();
             }
-        } catch (ConnectException e) {
+        } catch (IOException e) {
             return ClientRequestResult.FAILED_BY_SERVER_DOWN;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -114,14 +123,13 @@ public class ClientService implements Callable<ClientRequestResult> {
                         myEmail = (List<ValidEmail>) o;
                         System.out.println("Handshaking completed.");
                     }
-                } else {
-
                 }
+
                 emailManager.loadEmail(myEmail);
                 return true;
             } else {
                 System.out.println("Handshaking FAILED. List<ValidEmail> is not valid.");
-                ViewFactory.viewAlert("Errore", "Ricevuto un oggetto incompatibile da parte del server.");
+                ViewManager.viewAlert("Errore", "Ricevuto un oggetto incompatibile da parte del server.");
                 return false;
             }
         } catch (ClassNotFoundException | IOException e) {
@@ -195,6 +203,7 @@ public class ClientService implements Callable<ClientRequestResult> {
                 if (!((List<?>) o).isEmpty()) {
                     if (((List<?>) o).get(0) instanceof ValidEmail) {
                         validEmailToReceive = (List<ValidEmail>) o;
+                        ViewManager.viewAlert("Nuovo messaggio", "Hai ricevuto" + validEmailToReceive.size() + "email");
                         emailManager.loadEmail(validEmailToReceive);
                         System.out.println("RiceviMessaggi completed.");
                         return true;

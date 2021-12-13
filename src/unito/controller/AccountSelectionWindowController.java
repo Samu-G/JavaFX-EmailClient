@@ -10,7 +10,7 @@ import unito.controller.service.ClientRequestResult;
 import unito.controller.service.ClientRequestType;
 import unito.controller.service.ClientService;
 import unito.model.EmailAccount;
-import unito.view.ViewFactory;
+import unito.view.ViewManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.FutureTask;
@@ -27,16 +27,17 @@ public class AccountSelectionWindowController extends BaseController implements 
     private ChoiceBox<EmailAccount> accountPicker;
 
     /**
-     * @param emailManager
-     * @param viewFactory   abstract view controller
-     * @param fxmlName      fxml file path of this controller
+     * @param emailManager riferimento all'emailManger dell'applicazione
+     * @param viewManager riferimento al viewManager dell'applicazione
+     * @param fxmlName path del file .fxml
      */
-    public AccountSelectionWindowController(EmailManager emailManager, ViewFactory viewFactory, String fxmlName) {
-        super(emailManager, viewFactory, fxmlName);
+    public AccountSelectionWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName) {
+        super(emailManager, viewManager, fxmlName);
     }
 
     /**
      * Azione legata al bottone "login" della finestra di selezione dell'account
+     * Esegue un FutureTask e restituisce la risposta del server a video
      */
     @FXML
     void loginButtonAction() {
@@ -63,11 +64,11 @@ public class AccountSelectionWindowController extends BaseController implements 
 
             switch (r) {
                 case SUCCESS:
-                    ViewFactory.viewAlert("Evviva!", "Login avvenuto con successo");
+                    ViewManager.viewAlert("Evviva!", "Login avvenuto con successo");
                     Stage thisStage = (Stage) errorLabel.getScene().getWindow();
-                    viewFactory.closeStage(thisStage);
-                    viewFactory.showMainWindow();
-                    viewFactory.getMainWindowController().setLabel("Connessione stabilita con il server: autenticato come " + emailManager.getCurrentAccount().getAddress());
+                    viewManager.closeStage(thisStage);
+                    viewManager.showMainWindow();
+                    viewManager.getMainWindowController().setLabel("Connessione stabilita con il server: autenticato come " + emailManager.getCurrentAccount().getAddress());
                     break;
 
                 case FAILED_BY_CREDENTIALS:
@@ -89,12 +90,6 @@ public class AccountSelectionWindowController extends BaseController implements 
         accountPicker.setValue(emailManager.getCurrentAccount());
     }
 
-    /**
-     * Inizializza il controller
-     *
-     * @param url
-     * @param resourceBundle
-     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setUpMenuButton();

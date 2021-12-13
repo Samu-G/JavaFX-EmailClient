@@ -90,7 +90,7 @@ public class ValidEmail implements Serializable {
     }
 
     /**
-     * Crea una stringa adatta per la visualizzazione
+     * Crea una stringa adatta per la visualizzazione su standard output
      *
      * @return l'oggetto nella relativa rappresentazione di stringa
      */

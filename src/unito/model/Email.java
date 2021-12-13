@@ -1,8 +1,9 @@
 package unito.model;
 
 import javafx.beans.property.SimpleStringProperty;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Classe Email volta alla visualizzazione su view della classe serializzabile ValidEmail
@@ -33,18 +34,12 @@ public class Email {
 
     /*Constructor*/
 
-    /**
-     * @param sender sender of the email
-     * @param recipient array of recipients of the email
-     * @param subject subject of the email
-     * @param textMessage message of the email
-     */
     public Email(String sender, String[] recipient, String subject, String textMessage) {
         this.sender = new SimpleStringProperty(sender);
 
         String s = "";
         for (String rec : recipient) {
-            s.concat(rec + " ");
+            s = s.concat(rec + ", ");
         }
 
         this.recipients = new SimpleStringProperty(s);
@@ -57,16 +52,13 @@ public class Email {
         this.identifier = this.effectiveDate.hashCode();
     }
 
-    /**
-     * @param validEmail serializable email
-     */
     public Email(ValidEmail validEmail) {
         this.identifier = validEmail.getIdentifier();
         this.sender = new SimpleStringProperty(validEmail.getSender());
 
         String s = "";
         for (String rec : validEmail.getRecipients()) {
-            s.concat(rec + ", ");
+            s = s.concat(rec + ", ");
         }
 
         this.recipients = new SimpleStringProperty(s);
@@ -126,12 +118,6 @@ public class Email {
 
     /*Aux*/
 
-    /**
-     * Controlla se l'oggetto corrisponde alla Email corrente
-     *
-     * @param o l'oggetto da confrontare
-     * @return true se sono uguali, altrimenti false
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,15 +129,10 @@ public class Email {
                 Objects.equals(date, that.date);
     }
 
-    /**
-     * Crea una stringa adatta per la visualizzazione
-     *
-     * @return l'oggetto nella relativa rappresentazione di stringa
-     */
     @Override
     public String toString() {
         return "Sender: " + getSender() + "\n" +
-                "Receiver: " + Arrays.toString(getRecipientsArray()) + "\n" +
+                "Reciver: " + Arrays.toString(getRecipientsArray()) + "\n" +
                 "Date: " + getDate() + "\n" +
                 "Text: " + textMessage.get() + "\n" +
                 "Identifier is: " + getIdentifier() + "\n";
