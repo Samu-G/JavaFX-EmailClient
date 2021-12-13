@@ -65,6 +65,7 @@ public class ViewManager {
         System.out.println("showComposeWindow() called.");
         composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml", clearTextArea);
         initializeView(composeWindowController, "Componi un messaggio");
+        composeWindowController.setClearTextAreaAction();
     }
 
     /**

@@ -2,11 +2,13 @@ package unito.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import unito.EmailManager;
 import unito.model.Email;
 import unito.view.ViewManager;
@@ -32,9 +34,9 @@ public class MessageWindowController extends BaseController implements Initializ
 
     /**
      * @param emailManager riferimento all'emailManger dell'applicazione
-     * @param viewManager riferimento al viewManager dell'applicazione
-     * @param fxmlName path del file .fxml
-     * @param emailToView oggetto Email da visualizzare nella vista
+     * @param viewManager  riferimento al viewManager dell'applicazione
+     * @param fxmlName     path del file .fxml
+     * @param emailToView  oggetto Email da visualizzare nella vista
      */
     public MessageWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName, Email emailToView) {
         super(emailManager, viewManager, fxmlName);
@@ -53,7 +55,9 @@ public class MessageWindowController extends BaseController implements Initializ
      * Rispondi a tutti i destinari inseriti
      */
     @FXML
-    void rispondiATuttiButtonAction() { emailManager.replyAll(emailToView); }
+    void rispondiATuttiButtonAction() {
+        emailManager.replyAll(emailToView);
+    }
 
     /**
      * Inoltra l'email selezionata
@@ -67,7 +71,12 @@ public class MessageWindowController extends BaseController implements Initializ
      * Cancella l'email selezionata
      */
     @FXML
-    void cancellaButtonAction() { emailManager.delete(emailToView); }
+    void cancellaButtonAction() {
+        emailManager.delete(emailToView);
+        Stage thisStage = (Stage) messageTextArea.getScene().getWindow();
+        viewManager.closeStage(thisStage);
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

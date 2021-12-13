@@ -42,6 +42,10 @@ public class Email {
             s = s.concat(rec + ", ");
         }
 
+        if (s.length() > 0 && s.charAt(s.length() - 2) == ',') {
+            s = s.substring(0, s.length() - 2);
+        }
+
         this.recipients = new SimpleStringProperty(s);
         this.recipients_array = recipient;
         this.subject = new SimpleStringProperty(subject);
@@ -59,6 +63,10 @@ public class Email {
         String s = "";
         for (String rec : validEmail.getRecipients()) {
             s = s.concat(rec + ", ");
+        }
+
+        if (s.length() > 0 && s.charAt(s.length() - 2) == ',') {
+            s = s.substring(0, s.length() - 2);
         }
 
         this.recipients = new SimpleStringProperty(s);

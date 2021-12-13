@@ -25,7 +25,7 @@
          </font>
       </Text>
       <TextField fx:id="subjectTextField" layoutX="109.0" layoutY="8.0" prefHeight="25.0" prefWidth="459.0" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="30.0" />
-      <TextField fx:id="recipientsTextField" layoutX="129.0" layoutY="48.0" onMouseClicked="#clearTextAreaAction" prefHeight="25.0" prefWidth="439.0" text="immettere gli indirizzi email separati da una virgola e uno spazio" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="30.0" />
+      <TextField fx:id="recipientsTextField" layoutX="129.0" layoutY="48.0" prefHeight="25.0" prefWidth="439.0" text="immettere gli indirizzi email separati da una virgola e uno spazio" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="30.0" />
       <TextArea fx:id="messageTextArea" layoutX="31.0" layoutY="121.0" prefHeight="218.0" prefWidth="540.0" AnchorPane.bottomAnchor="61.0" AnchorPane.leftAnchor="31.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="121.0" />
       <Button contentDisplay="CENTER" layoutX="239.0" layoutY="341.0" mnemonicParsing="false" onAction="#sendMessageAction" prefHeight="45.0" prefWidth="122.0" text="INVIA" textAlignment="CENTER" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="239.0" AnchorPane.rightAnchor="239.0" />
    </children>

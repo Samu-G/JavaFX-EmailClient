@@ -33,6 +33,8 @@ public class ComposeWindowController extends BaseController {
     /* Array di destinatari */
     private String[] recipientsBuffer;
 
+    private boolean clearTextArea;
+
     private boolean dirtyTextArea = true;
 
     /**
@@ -42,9 +44,7 @@ public class ComposeWindowController extends BaseController {
      */
     public ComposeWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName, boolean clearTextArea) {
         super(emailManager, viewManager, fxmlName);
-        if (clearTextArea) {
-            recipientsTextField.setOnMouseClicked(mouseEvent -> clearTextAreaAction());
-        }
+        this.clearTextArea = clearTextArea;
     }
 
     /* Setter */
@@ -80,6 +80,12 @@ public class ComposeWindowController extends BaseController {
             }
         }
         return true;
+    }
+
+    public void setClearTextAreaAction() {
+        if (clearTextArea) {
+            recipientsTextField.setOnMouseClicked(mouseEvent -> clearTextAreaAction());
+        }
     }
 
     /**

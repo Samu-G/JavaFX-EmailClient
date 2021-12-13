@@ -168,7 +168,6 @@ public class EmailManager {
         FutureTask<ClientRequestResult> deleteService = new FutureTask<>(clientService);
         Thread thread = new Thread(deleteService);
         thread.start();
-
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -190,7 +189,6 @@ public class EmailManager {
                 }
             }
         });
-
     }
 
     /**
@@ -226,7 +224,7 @@ public class EmailManager {
             viewManager.showComposeWindow(false);
             if (viewManager.getComposeWindowController() != null) {
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
-                viewManager.getComposeWindowController().setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
+                viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getRecipients());
             }
         }
     }
@@ -238,7 +236,7 @@ public class EmailManager {
      */
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
-            viewManager.showComposeWindow(false);
+            viewManager.showComposeWindow(true);
             if (viewManager.getComposeWindowController() != null) {
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
                 viewManager.getComposeWindowController().setMessageTextArea(emailSelected.getTextMessage());

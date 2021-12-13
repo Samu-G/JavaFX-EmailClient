@@ -35,14 +35,8 @@ public class ClientService implements Callable<ClientRequestResult> {
      * @param toSend Email (nullable) da inviare al Server
      */
     public ClientService(EmailManager emailManager, ClientRequestType clientRequestType, Email toSend) {
-        ValidAccount myCredentialsTemp;
         this.emailManager = emailManager;
-        try {
-            myCredentialsTemp = new ValidAccount(emailManager.getCurrentAccount().getAddress(), emailManager.getCurrentAccount().getPassword());
-        } catch (RuntimeException e) {
-            myCredentialsTemp = new ValidAccount(null, null);
-        }
-        this.myCredentials = myCredentialsTemp;
+        this.myCredentials = new ValidAccount(emailManager.getCurrentAccount().getAddress(), emailManager.getCurrentAccount().getPassword());
         this.clientRequestType = clientRequestType;
         this.emailToSend = toSend;
     }
@@ -61,7 +55,7 @@ public class ClientService implements Callable<ClientRequestResult> {
 
             socket = new Socket(nomeHost, 8189);
 
-            System.out.println("Ho aperto il socket verso il server. \n");
+            System.out.println("Ho aperto il socket verso il server.");
             try {
                 openStream();
 
@@ -99,6 +93,8 @@ public class ClientService implements Callable<ClientRequestResult> {
                 e.printStackTrace();
             } finally {
                 closeStream();
+                socket.close();
+                System.out.println("Ho chiuso il socket verso il server. \n");
             }
         } catch (IOException e) {
             return ClientRequestResult.FAILED_BY_SERVER_DOWN;
@@ -235,15 +231,9 @@ public class ClientService implements Callable<ClientRequestResult> {
 
                     outStream.writeObject(validEmailToSend);
 
-                    Object o = inStream.readObject();
+                    opResult = (boolean) inStream.readObject();
 
-                    if (o instanceof Boolean) {
-                        opResult = (Boolean) o;
-                        return opResult;
-                    } else {
-                        System.out.println("CancellaMessaggio FAILED.");
-                        return false;
-                    }
+                    return opResult;
 
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
