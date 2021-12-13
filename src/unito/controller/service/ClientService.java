@@ -5,13 +5,9 @@ import unito.model.ValidAccount;
 import unito.model.ValidEmail;
 import unito.model.Email;
 import unito.view.ViewManager;
-
-import javax.swing.text.ViewFactory;
 import java.io.*;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
