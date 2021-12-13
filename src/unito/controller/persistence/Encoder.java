@@ -7,8 +7,8 @@ import java.util.Base64;
  */
 public class Encoder {
 
-    private static Base64.Encoder enc = Base64.getEncoder();
-    private static Base64.Decoder dec = Base64.getDecoder();
+    private static final Base64.Encoder enc = Base64.getEncoder();
+    private static final Base64.Decoder dec = Base64.getDecoder();
 
     /**
      * Prende la password e la cripta

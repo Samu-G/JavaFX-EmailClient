@@ -160,7 +160,7 @@ public class MainWindowController extends BaseController implements Initializabl
      */
     @FXML
     void newMessageAction() {
-        viewManager.showComposeWindow();
+        viewManager.showComposeWindow(true);
     }
 
     /**

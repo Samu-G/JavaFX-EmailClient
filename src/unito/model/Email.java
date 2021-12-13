@@ -132,7 +132,7 @@ public class Email {
     @Override
     public String toString() {
         return "Sender: " + getSender() + "\n" +
-                "Reciver: " + Arrays.toString(getRecipientsArray()) + "\n" +
+                "Receiver: " + Arrays.toString(getRecipientsArray()) + "\n" +
                 "Date: " + getDate() + "\n" +
                 "Text: " + textMessage.get() + "\n" +
                 "Identifier is: " + getIdentifier() + "\n";

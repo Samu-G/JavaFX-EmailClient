@@ -209,7 +209,7 @@ public class EmailManager {
         if (emailSelected != null) {
             String recipients = emailSelected.getRecipients();
             if (recipients != null) {
-                viewManager.showComposeWindow();
+                viewManager.showComposeWindow(false);
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
                 viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getSender());
             }
@@ -223,7 +223,7 @@ public class EmailManager {
      */
     public void replyAll(Email emailSelected) {
         if (emailSelected != null) {
-            viewManager.showComposeWindow();
+            viewManager.showComposeWindow(false);
             if (viewManager.getComposeWindowController() != null) {
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
                 viewManager.getComposeWindowController().setRecipientsTextField(String.join(",", emailSelected.getRecipientsArray()));
@@ -238,7 +238,7 @@ public class EmailManager {
      */
     public void forward(Email emailSelected) {
         if (emailSelected != null) {
-            viewManager.showComposeWindow();
+            viewManager.showComposeWindow(false);
             if (viewManager.getComposeWindowController() != null) {
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
                 viewManager.getComposeWindowController().setMessageTextArea(emailSelected.getTextMessage());

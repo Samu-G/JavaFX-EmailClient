@@ -4,7 +4,7 @@ import unito.EmailManager;
 import unito.view.ViewManager;
 
 /**
- * Questa è una classe astratta che esplicita la base dei controller.
+ * Questa è una classe astratta che esplicita la base dei controller
  */
 public abstract class BaseController {
 

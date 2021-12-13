@@ -21,9 +21,6 @@ public class EmailAccount {
         this.password = new SimpleStringProperty(password);
     }
 
-    /**
-     * @param validAccount
-     */
     public EmailAccount(ValidAccount validAccount) {
         this.address = new SimpleStringProperty(validAccount.getAddress());
         this.password = new SimpleStringProperty(validAccount.getPassword());

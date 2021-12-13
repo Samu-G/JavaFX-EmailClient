@@ -12,10 +12,6 @@ public class ValidAccount implements Serializable {
 
     /*Constructor*/
 
-    /**
-     * @param address address of account
-     * @param password password of account
-     */
     public ValidAccount(String address, String password) {
         this.address = address;
         this.password = password;

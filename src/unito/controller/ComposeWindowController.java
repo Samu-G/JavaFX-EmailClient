@@ -37,11 +37,14 @@ public class ComposeWindowController extends BaseController {
 
     /**
      * @param emailManager riferimento all'emailManger dell'applicazione
-     * @param viewManager riferimento al viewManager dell'applicazione
-     * @param fxmlName path del file .fxml
+     * @param viewManager  riferimento al viewManager dell'applicazione
+     * @param fxmlName     path del file .fxml
      */
-    public ComposeWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName) {
+    public ComposeWindowController(EmailManager emailManager, ViewManager viewManager, String fxmlName, boolean clearTextArea) {
         super(emailManager, viewManager, fxmlName);
+        if (clearTextArea) {
+            recipientsTextField.setOnMouseClicked(mouseEvent -> clearTextAreaAction());
+        }
     }
 
     /* Setter */

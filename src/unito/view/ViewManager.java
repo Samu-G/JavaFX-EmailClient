@@ -61,9 +61,9 @@ public class ViewManager {
     /**
      * Crea il controller per la finestra di composizione, dopo inizializza la finestra di composizione
      */
-    public void showComposeWindow() {
+    public void showComposeWindow(boolean clearTextArea) {
         System.out.println("showComposeWindow() called.");
-        composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml");
+        composeWindowController = new ComposeWindowController(emailManager, this, "ComposeWindow.fxml", clearTextArea);
         initializeView(composeWindowController, "Componi un messaggio");
     }
 
@@ -99,7 +99,7 @@ public class ViewManager {
     }
 
     /**
-     * Chiude una finestra rimuovendola dalla lista activeStage
+     * Chiude una finestra rimuovendola dalla lista activeStages
      *
      * @param stageToClose finestra da chiudere
      */

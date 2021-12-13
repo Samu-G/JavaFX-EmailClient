@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Classe Email (model)
+ * Classe ValidEmail (model serializzabile)
  */
 public class ValidEmail implements Serializable {
 
@@ -26,9 +26,6 @@ public class ValidEmail implements Serializable {
 
     /*Constructor*/
 
-    /**
-     * @param email
-     */
     public ValidEmail(Email email) {
         this.identifier = email.getIdentifier();
         this.sender = email.getSender();
