@@ -224,7 +224,22 @@ public class EmailManager {
             viewManager.showComposeWindow(false);
             if (viewManager.getComposeWindowController() != null) {
                 viewManager.getComposeWindowController().setSubjectTextField(emailSelected.getSubject());
-                viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getRecipients());
+
+                boolean haveToAddSender = false;
+                for(String s : emailSelected.getRecipientsArray()) {
+                    if(!s.equals(emailSelected.getSender())) {
+                        haveToAddSender = true;
+                    } else {
+                        haveToAddSender = false;
+                        break;
+                    }
+                }
+
+                if(haveToAddSender) {
+                    viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getRecipients() + ", " + emailSelected.getSender());
+                } else {
+                    viewManager.getComposeWindowController().setRecipientsTextField(emailSelected.getRecipients());
+                }
             }
         }
     }
